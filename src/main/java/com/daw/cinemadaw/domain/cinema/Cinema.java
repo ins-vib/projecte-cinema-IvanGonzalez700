@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Cinema {
@@ -24,6 +25,9 @@ public class Cinema {
 
     @Column
     private String postalCode;
+
+    @OneToMany
+    private Room room;
 
     public Cinema() {
     }
@@ -69,4 +73,12 @@ public class Cinema {
     public void setId(Long id) {
         this.id = id;
     }
+
+
+    @Override
+    public String toString() {
+        return "Cinema [id=" + id + ", name=" + name + ", address=" + address + ", city=" + city + ", postalCode="
+                + postalCode + "]";
+    }
+    
 }
