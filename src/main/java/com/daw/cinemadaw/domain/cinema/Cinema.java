@@ -1,5 +1,8 @@
 package com.daw.cinemadaw.domain.cinema;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,8 +29,8 @@ public class Cinema {
     @Column
     private String postalCode;
 
-    @OneToMany
-    private Room room;
+    @OneToMany(mappedBy = "cinema")
+    private List<Room> rooms = new ArrayList<>();
 
     public Cinema() {
     }
@@ -74,11 +77,19 @@ public class Cinema {
         this.id = id;
     }
 
+    public List<Room> getRooms() {
+        return rooms;
+    }
 
     @Override
     public String toString() {
         return "Cinema [id=" + id + ", name=" + name + ", address=" + address + ", city=" + city + ", postalCode="
                 + postalCode + "]";
+    }
+
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
     
 }
