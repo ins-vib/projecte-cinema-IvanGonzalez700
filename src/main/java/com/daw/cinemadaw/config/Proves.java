@@ -35,7 +35,7 @@ public class Proves implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         
-
+        /* 
         Optional<Cinema> optionalCinema = cinemaRepository.findById(1L);
 
         if (optionalCinema.isPresent()) {
@@ -96,5 +96,6 @@ public class Proves implements CommandLineRunner {
                 }
             }            
         } 
+            */
     }
 }
