@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.repository.CinemaRepository;
@@ -33,7 +34,7 @@ public class HomeController {
     }
 
     //detalls del cinema
-    @GetMapping("/cinema/{id}")
+    @GetMapping("/cinemes/{id}")
     public String detall(@PathVariable Long id, Model model) {
 
     Optional<Cinema> optional = cinemaRepository.findById(id);
@@ -49,10 +50,31 @@ public class HomeController {
     }
 
     //Esborrar cinema
-    @GetMapping("/cinema/delete/{id}")
-    public void esborrar(@PathVariable Long id, Model model) {
+    @GetMapping("/cinemes/delete/{id}")
+    public String delete(@PathVariable Long id, Model model) {
 
-        cinemaRepository.deleteById(id);
+        Optional<Cinema> optional = cinemaRepository.findById(id);
 
+        if (optional.isPresent()) {
+            Cinema cinema = optional.get();
+            cinemaRepository.delete(cinema);
+            
+        }
+        return "redirect:/cinema";
     }
+
+
+    @GetMapping("/cinemes/create")
+    public String create() {
+
+        return "create-cinema";
+    }
+
+
+    @PostMapping("/cinemes/create")
+    public String alta() {
+
+        return "create-cinema";
+    }
+
 }

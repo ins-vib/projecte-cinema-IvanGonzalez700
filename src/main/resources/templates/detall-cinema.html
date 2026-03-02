@@ -24,6 +24,10 @@
     <h1>Ciutat:</h1>
     <h2 th:text="${cinema.city}">Ciutat</h2>
 
+    <ul th:each="room: ${llista}">
+        <li th:text="${room.name}">Nom</li>
+    </ul>
+
 </body>
 
 </html>
