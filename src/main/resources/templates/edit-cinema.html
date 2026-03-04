@@ -1,0 +1,26 @@
+<h1>EDIT YOUR CINEMA</h1>
+
+<form th:action="@{/cinemes/update}" method="post" th:object="${cinema}">
+
+
+    <input hidden type="text" th:field="*{id}">
+
+    <label>Nom:</label>
+    <input type="text" th:field="*{name}">
+    <br>
+
+    <label>Adreça:</label>
+    <input type="text" th:field="*{address}">
+    <br>
+
+    <label>City:</label>
+    <input type="text" th:field="*{city}">
+    <br>
+
+    <label>Codi:</label>
+    <input type="text" th:field="*{postalCode}">
+    <br>
+
+    <button type="submit">Editar cinema</button>
+
+</form>

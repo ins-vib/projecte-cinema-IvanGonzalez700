@@ -9,7 +9,7 @@
 
 <body>
 
-    <a th:href="@{/cinemes/create}">nou</a>
+    
 
     <h1>Llista Cinemes</h1>
     <table>
@@ -32,10 +32,18 @@
                     <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">Eliminar cinema</a>
                 </td>
 
+                <td>
+                    <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">Editar cinema</a>
+                </td>
+
             </tr>
 
         </tbody>
     </table>
+<br>
+<br>
+<br>
+    <a th:href="@{/cinemes/create}">Crear nou cinema</a>
 </body>
 
 </html>

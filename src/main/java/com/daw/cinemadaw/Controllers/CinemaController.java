@@ -3,7 +3,6 @@ package com.daw.cinemadaw.Controllers;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,19 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.repository.CinemaRepository;
 
-@Controller
-public class HomeController {
+public class CinemaController {
 
     private CinemaRepository cinemaRepository;
-
-    public HomeController(CinemaRepository cinemaRepository) {
-        this.cinemaRepository = cinemaRepository;
-    }
-
-    @GetMapping("/")
-    public String home() {
-        return "home";
-    }
 
     @GetMapping("/cinemes")
     public String cinemes(Model model){
@@ -98,4 +87,5 @@ public class HomeController {
         cinemaRepository.save(cinema);
         return "redirect:/cinemes";
     }
+
 }

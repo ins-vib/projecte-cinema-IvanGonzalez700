@@ -10,23 +10,25 @@
 <body>
 
 
-    <form th:action="@{/cinema/create}" method="post">
+    <form th:action="@{/cinemes/create}" method="post" th:object="${cinema}">
 
-        <label>nom</label>
-        <input type="text">
+        <label>Nom:</label>
+        <input type="text" th:field="*{name}">
         <br>
 
-        <label>adreca</label>
-        <input type="text">
+        <label>Adreça:</label>
+        <input type="text" th:field="*{address}">
         <br>
 
-        <label>city</label>
-        <input type="text">
+        <label>City:</label>
+        <input type="text" th:field="*{city}">
         <br>
 
-        <label>codi</label>
-        <input type="text">
+        <label>Codi:</label>
+        <input type="text" th:field="*{postalCode}">
         <br>
+
+        <button type="submit">Agregar cinema</button>
 
     </form>
 </body>
