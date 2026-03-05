@@ -3,6 +3,7 @@ package com.daw.cinemadaw.Controllers;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,9 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.repository.CinemaRepository;
 
+@Controller
 public class CinemaController {
 
     private CinemaRepository cinemaRepository;
+
+    public CinemaController(CinemaRepository cinemaRepository) {
+        this.cinemaRepository = cinemaRepository;
+    }
 
     @GetMapping("/cinemes")
     public String cinemes(Model model){
@@ -33,15 +39,13 @@ public class CinemaController {
         Cinema cinema = optional.get();
         model.addAttribute("cinema", cinema);
         return "detall-cinema";
-    }
-
+        }
         return "redirect:/";
-
     }
 
     //Esborrar cinema
     @GetMapping("/cinemes/delete/{id}")
-    public String delete(@PathVariable Long id, Model model) {
+    public String delete(@PathVariable Long id) {
 
         Optional<Cinema> optional = cinemaRepository.findById(id);
 
@@ -50,7 +54,7 @@ public class CinemaController {
             cinemaRepository.delete(cinema);
             
         }
-        return "redirect:/cinema";
+        return "redirect:/cinemes";
     }
 
 
@@ -69,7 +73,7 @@ public class CinemaController {
         return "redirect:/cinemes";
     }
 
-    @GetMapping("/cinema/update/{id}")
+    @GetMapping("/cinemes/update/{id}")
     public String update(@PathVariable Long id, Model model) {
         Optional<Cinema> optional = cinemaRepository.findById(id);
         if (optional.isPresent()) {
@@ -77,9 +81,7 @@ public class CinemaController {
             model.addAttribute(cinema);
             return "edit-cinema";
         }
-
         return "redirect:/cinemes";
-        
     }
 
     @PostMapping("/cinemes/update")

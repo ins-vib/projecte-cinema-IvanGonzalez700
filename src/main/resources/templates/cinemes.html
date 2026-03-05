@@ -9,7 +9,7 @@
 
 <body>
 
-    
+
 
     <h1>Llista Cinemes</h1>
     <table>
@@ -25,24 +25,24 @@
                 <td th:text="${cinema.city}">Ciutat</td>
 
                 <td>
-                    <a th:href="@{/cinema/{id}(id=${cinema.id})}">Veure detalls</a>
+                    <a th:href="@{/cinemes/{id}(id=${cinema.id})}">Veure detalls</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cinema/delete/{id}(id=${cinema.id})}">Eliminar cinema</a>
+                    <a th:href="@{/cinemes/delete/{id}(id=${cinema.id})}">Eliminar cinema</a>
                 </td>
 
                 <td>
-                    <a th:href="@{/cinema/update/{id}(id=${cinema.id})}">Editar cinema</a>
+                    <a th:href="@{/cinemes/update/{id}(id=${cinema.id})}">Editar cinema</a>
                 </td>
 
             </tr>
 
         </tbody>
     </table>
-<br>
-<br>
-<br>
+    <br>
+    <br>
+    <br>
     <a th:href="@{/cinemes/create}">Crear nou cinema</a>
 </body>
 
