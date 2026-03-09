@@ -14,8 +14,17 @@
         <h1>TITOL</h1>
 
         <a href="cinemes">Cinema</a>
+        <a href="sales">Sales</a>
+
+        <ul>
+            <li th:each="noticia : ${llista}">
+                <strong th:text="${noticia.headLine}"></strong>
+                <p th:text="${noticia.body}"></p>
+            </li>
+        </ul>
+
     </header>
-    
+
 </body>
 
 </html>

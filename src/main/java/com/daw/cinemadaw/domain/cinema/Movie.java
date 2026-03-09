@@ -2,6 +2,8 @@ package com.daw.cinemadaw.domain.cinema;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,19 +17,20 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false, length = 200)
     private String title;
 
-    @Column
+    @Column(name = "duration_minutes", nullable = false)
     private int duration;
 
-    @Column
+    @Column(length = 50)
     private String genre;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column
+    @Column(name = "release_date")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate releaseDate;
 
     public Movie(String title, int duration, String genre, String description, LocalDate releaseDate) {
