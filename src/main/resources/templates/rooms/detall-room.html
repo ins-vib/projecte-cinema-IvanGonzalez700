@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CinemaDaw</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+    <h2><strong>DETALLS SALA:</strong></h2>
+    <!-- <header>
+           <h1>cinema</h1>
+           <nav>
+            <a href="/cinemes">cinemes</a>
+            <a href="#">contacte</a>
+           </nav> 
+        </header> -->
+    <section>
+        <strong>Nom:</strong>
+        <p th:text="${room.name}">Nom:</p>
+        <strong>Capacitat:</strong>
+        <p th:text="${room.capacity}">Capacitat:</p>
+        <a th:href="@{/cinema/{id}(id=${room.cinema.id})}">Back</a>
+
+
+    </section>
+    <!-- <section>
+            <h2><strong>SALES</strong></h2>
+            <ul>
+                <li th:each="sala: ${cinema.rooms}">
+                    <strong>Nom de la sala:</strong><p th:text="${sala.name}"></p>   
+                     
+                </li>
+                <li th:each="sala: ${cinema.rooms}">
+                     
+                    <strong>Capacitat:</strong> <p th:text="${sala.capacity}">Capacitat</p> 
+                </li>
+                <li th:each="sala: ${cinema.rooms}">
+                     
+                    <strong>ID:</strong> <p th:text="${sala.id}">ID</p> 
+                </li>
+            </ul>
+
+        </section> -->
+
+    <footer>
+        <p>2026 Cinema Daw</p>
+    </footer>
+</body>
+
+</html>

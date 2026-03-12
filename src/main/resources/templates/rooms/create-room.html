@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CinemaDaw</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+
+
+    <h2>CREAR SALA:</h2>
+    <form th:action="@{/cinemes/{cinemaId}/rooms(cinemaId=${cinemaId})}" th:object="${room}" method="post">
+
+        <label>Títol:</label><br>
+        <input type="text" th:field="*{name}" /><br><br>
+
+        <label>capacitat:</label><br>
+        <input type="number" th:field="*{capacity}" /><br><br>
+
+
+        <button type="submit">Guardar</button>
+
+    </form>
+
+</body>
+
+</html>

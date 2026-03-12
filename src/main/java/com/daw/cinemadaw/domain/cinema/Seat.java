@@ -8,6 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Seat {
@@ -19,6 +21,8 @@ public class Seat {
     @Column
     private int number;
 
+    @NotBlank(message="el nom del cinema")
+    @Size(min = 2, max = 100, message = "la ciutat")
     @Column
     private String seatRow;
 
@@ -32,6 +36,7 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     private SeatType type = SeatType.STANDARD;
 
+    
     @Column
     private boolean active;
 

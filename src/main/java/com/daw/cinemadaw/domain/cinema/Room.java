@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Room {
@@ -18,9 +20,12 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message="el nom del cinema")
+    @Size(min = 2, max = 100, message = "la ciutat")
     @Column
     private String name;
 
+    @NotBlank(message="la capacitat")
     @Column
     private int capacity;
 
@@ -70,6 +75,14 @@ public class Room {
     @Override
     public String toString() {
         return "Room [name=" + name + ", capacity=" + capacity + "]";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
     
 }

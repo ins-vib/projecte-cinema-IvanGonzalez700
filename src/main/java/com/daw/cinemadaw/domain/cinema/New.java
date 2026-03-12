@@ -1,8 +1,13 @@
 package com.daw.cinemadaw.domain.cinema;
 
+import jakarta.persistence.Column;
+
 public class New {
     
+    @Column
     private String headLine;
+
+    @Column
     private String body;
     
     public New(String headLine, String body) {

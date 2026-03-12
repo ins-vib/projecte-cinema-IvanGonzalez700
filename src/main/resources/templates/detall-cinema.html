@@ -28,6 +28,12 @@
         <li th:text="${room.name}">Nom</li>
     </ul>
 
+
+    <h2>sales</h2>
+
+    <div th:if="${#lists.isEmpty(cinema.rooms)}"> no hi ha sales</div>
+
+    <a th:href="@{/rooms/create/{id}(id)}">sales crear</a>
 </body>
 
 </html>

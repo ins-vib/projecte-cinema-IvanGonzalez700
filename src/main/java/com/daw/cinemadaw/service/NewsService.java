@@ -11,10 +11,6 @@ import com.daw.cinemadaw.domain.cinema.New;
 public class NewsService {
 
     ArrayList<New> newlist = new ArrayList<>();
-
-
-
-    
     public ArrayList<New> GetNews() throws FileNotFoundException{
         // Llegir un fitxer de text línia a línia
         File f = new File("news.txt");
