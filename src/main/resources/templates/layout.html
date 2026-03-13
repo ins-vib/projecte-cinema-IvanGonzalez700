@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca" th:fragment="layout(content)">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Aplicació Cinema</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+
+    <header>
+        <h1>Aplicació Cinema</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="movies/movies.html">Movies</a>
+        </nav>
+        <hr>
+    </header>
+
+
+
+    <main th:replace="${content}"></main>
+
+
+
+    <footer>
+        <hr>
+        <p>DAW1 2026</p>
+    </footer>
+
+</body>
+</html>

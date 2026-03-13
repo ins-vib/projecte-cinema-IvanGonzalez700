@@ -13,21 +13,18 @@
     <header>
         <h1>TITOL</h1>
 
-        <a href="cinemes">Cinema</a>
+        <a href="/cinemes">Cinema</a>
 
-        <a href="Movie">Movies</a>
+        <a href="/movies">Movies</a>
 
         <a href="news">News</a>
-
         <ul>
             <li th:each="noticia : ${llista}">
                 <strong th:text="${noticia.headLine}"></strong>
                 <p th:text="${noticia.body}"></p>
             </li>
         </ul>
-
     </header>
-
 </body>
 
 </html>
