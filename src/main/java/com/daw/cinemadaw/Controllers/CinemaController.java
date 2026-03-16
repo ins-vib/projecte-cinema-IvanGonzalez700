@@ -29,7 +29,7 @@ public class CinemaController {
     public String cinemes(Model model){
         List<Cinema> cinemes = cinemaRepository.findAll();
         model.addAttribute("llista", cinemes);
-        return "cinemes";
+        return "cinemes/cinemes";
     }
 
     //detalls del cinema
@@ -41,7 +41,7 @@ public class CinemaController {
     if (optional.isPresent()) {
         Cinema cinema = optional.get();
         model.addAttribute("cinema", cinema);
-        return "detall-cinema";
+        return "cinemes/detall-cinema";
         }
         return "redirect:/";
     }
@@ -66,7 +66,7 @@ public class CinemaController {
     public String create(Model model) {
         Cinema cinema = new Cinema();
         model.addAttribute("cinema",cinema);
-        return "create-cinema";
+        return "cinemes/create-cinema";
     }
 
     //Donar de alta el cinema
@@ -74,7 +74,7 @@ public class CinemaController {
     public String alta(@Valid @ModelAttribute Cinema cinema, BindingResult result) {
 
         if (result.hasErrors()) {
-            return "create-cinema";
+            return "cinemes/create-cinema";
         }
         cinemaRepository.save(cinema);
         return "redirect:/cinemes";
@@ -86,7 +86,7 @@ public class CinemaController {
         if (optional.isPresent()) {
             Cinema cinema = optional.get();
             model.addAttribute(cinema);
-            return "edit-cinema";
+            return "cinemes/edit-cinema";
         }
         return "redirect:/cinemes";
     }

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
 import com.daw.cinemadaw.domain.cinema.Room;
@@ -16,7 +15,6 @@ import com.daw.cinemadaw.repository.CinemaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 
 @Controller
-@RequestMapping("/rooms")
 public class RoomController {
 
     
@@ -29,22 +27,22 @@ public class RoomController {
         this.cinemaRepository = cinemaRepository;
     }
 
-    @GetMapping("/create")
+    @GetMapping("rooms/create")
     public String create_room(Model model){
 
     Room room = new Room();    
     model.addAttribute("sala", room);
-    return "room/create-room";
+    return "rooms/create-room";
     }
 
-    @PostMapping("/create")
+    @PostMapping("rooms/create")
     public String guardarroom(@ModelAttribute("sala") Room room){
         roomRepository.save(room);
         return "redirect:/movies";
     }
 
     //detall 
-    @GetMapping("/{id}")
+    @GetMapping("rooms/{id}")
     public String show(@PathVariable Long id, Model model){
 
         Optional<Room>optional = roomRepository.findById(id);
@@ -53,11 +51,11 @@ public class RoomController {
         }
         Room room=optional.get();
         model.addAttribute("room",room);
-        return "room/detall-room";
+        return "rooms/detall-room";
     }
 
     // delete
-    @GetMapping("{id}/delete")
+    @GetMapping("rooms/{id}/delete")
     public String delete(@PathVariable Long id){
         Optional<Room>optional =roomRepository.findById(id);
         Long cinemaId=null;
@@ -67,12 +65,11 @@ public class RoomController {
             room= optional.get();
             cinemaId=room.getCinema().getId();
             roomRepository.delete(room);
-
         }
-        return "redirect:/cinema/"+cinemaId;
+        return "redirect:/cinemes/"+cinemaId;
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("rooms/{id}/edit")
     public String edit(@PathVariable Long id, Model model){
     Optional<Room> optional = roomRepository.findById(id);
     if (optional.isEmpty()) {
@@ -80,11 +77,11 @@ public class RoomController {
         
     }
     model.addAttribute("room",optional.get());
-    return "rooms/edit";
+    return "rooms/editar-room";
 
     }
 
-    @PostMapping("/edit")
+    @PostMapping("rooms/edit")
     public String update(@ModelAttribute Room room){
 
     Optional<Room> existingRoom = roomRepository.findById(room.getId());
@@ -100,7 +97,7 @@ public class RoomController {
 
     }
 
-    @GetMapping("/create/{cinemaId}")
+    @GetMapping("rooms/create/{cinemaId}")
     public String create(@PathVariable Long cinemaId, Model model){
 
         Room room = new Room();
@@ -112,7 +109,7 @@ public class RoomController {
     }
 
 
-    @PostMapping("/create/{cinemaId}")
+    @PostMapping("rooms/create/{cinemaId}")
     public String create(@PathVariable Long cinemaId, @ModelAttribute Room room){
 
         Optional<Cinema> cinemaOpt = cinemaRepository.findById(cinemaId);

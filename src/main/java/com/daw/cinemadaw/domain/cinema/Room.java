@@ -25,7 +25,6 @@ public class Room {
     @Column
     private String name;
 
-    @NotBlank(message="la capacitat")
     @Column
     private int capacity;
 

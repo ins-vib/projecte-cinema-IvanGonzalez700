@@ -6,22 +6,20 @@
     <title>Aplicació Cinema</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
+
 <body>
 
     <header>
         <h1>Aplicació Cinema</h1>
         <nav>
-            <a href="home.html">Home</a>
-            <a href="movies/movies.html">Movies</a>
+            <a th:href="@{/cinemes}">Cinemes</a>
+            <a th:href="@{/movies}">Movies</a>
+            <a th:href="@{/news}">News</a>
         </nav>
         <hr>
     </header>
 
-
-
     <main th:replace="${content}"></main>
-
-
 
     <footer>
         <hr>
@@ -29,4 +27,5 @@
     </footer>
 
 </body>
+
 </html>

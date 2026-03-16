@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Seient</title>
+</head>
+
+<body>
+
+    <h1>Editar Seient #<span th:text="${seat.number}"></span></h1>
+
+    <form th:action="@{/seats/{id}/update(id=${seat.id})}" method="post" th:object="${seat}">
+
+        <input hidden type="text" th:field="*{id}">
+
+        <label>Número:</label>
+        <input type="number" th:field="*{number}">
+        <br>
+
+        <label>Posició X:</label>
+        <input type="number" th:field="*{x}">
+        <br>
+
+        <label>Posició Y:</label>
+        <input type="number" th:field="*{y}">
+        <br>
+
+        <label>Tipus:</label>
+        <select th:field="*{type}">
+            <option value="STANDARD">STANDARD</option>
+            <option value="PREMIUM">PREMIUM</option>
+            <option value="ADAPTED">ADAPTED</option>
+        </select>
+        <br>
+
+        <label>Actiu:</label>
+        <input type="checkbox" th:field="*{active}">
+        <br><br>
+
+        <button type="submit">Guardar canvis</button>
+        <a th:href="@{/room/{id}(id=${seat.room.id})}">Tornar</a>
+
+    </form>
+
+</body>
+
+</html>
