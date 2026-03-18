@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -16,6 +16,14 @@
             <span th:text="${seat.y}"></span>
         </li>
     </ul>
+
+
+
+    <a th:href="@{/seats/room/{id}/add(id=${room.id})}">Afegir nou seient</a>
+
+    <br>
+    <br>
+
 
     <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
         <g th:each="seat : ${seats}">

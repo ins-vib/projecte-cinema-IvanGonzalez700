@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class Room {
@@ -20,8 +19,7 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="el nom del cinema")
-    @Size(min = 2, max = 100, message = "la ciutat")
+    @NotBlank(message="el nom del cinema no pot ser buit")
     @Column
     private String name;
 

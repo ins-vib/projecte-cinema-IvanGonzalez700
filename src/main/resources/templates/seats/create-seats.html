@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Seient</title>
+    <title>Document</title>
 </head>
 
 <body>
 
-    <h1>Editar Seient #<span th:text="${seat.number}"></span></h1>
+    <h1>CREAR SEIENT</h1>
 
-    <form th:action="@{/seats/{id}/update(id=${seat.id})}" method="post" th:object="${seat}">
-
-        <input hidden type="text" th:field="*{id}">
+    <form th:action="@{/seats/room/{id}/create(id=${room.id})}" th:object="${seat}" method="post">
 
         <label>Número:</label>
         <input type="number" th:field="*{number}">
@@ -40,12 +38,8 @@
         <br><br>
 
         <button type="submit">Guardar canvis</button>
-        <a th:href="@{/room/{id}(id=${seat.room.id})}">Tornar</a>
-        
-        <a th:href="@{/seats/{id}/delete(id=${seat.id})}">Eliminar seient</a>
 
     </form>
-
 
 </body>
 

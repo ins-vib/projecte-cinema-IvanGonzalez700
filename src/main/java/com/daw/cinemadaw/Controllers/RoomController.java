@@ -29,14 +29,13 @@ public class RoomController {
 
     @GetMapping("rooms/create")
     public String create_room(Model model){
-
-    Room room = new Room();    
-    model.addAttribute("sala", room);
-    return "rooms/create-room";
+        Room room = new Room();    
+        model.addAttribute("sala", room);
+        return "rooms/create-room";
     }
 
     @PostMapping("rooms/create")
-    public String guardarroom(@ModelAttribute("sala") Room room){
+    public String guardar_room(@ModelAttribute("sala") Room room){
         roomRepository.save(room);
         return "redirect:/movies";
     }

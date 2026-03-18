@@ -24,17 +24,14 @@ public class Cinema {
     private Long id;
 
     @NotBlank(message="el nom del cinema")
-    @Size(min = 2, max = 100, message = "la ciutat")
     @Column
     private String name;
 
     @NotBlank(message="el nom del la adreca")
-    @Size(min = 5, max = 150, message = "la ciutat")
     @Column
     private String address;
 
     @NotBlank(message="el nom del la ciutat")
-    @Size(min = 2, max = 80, message = "la ciutat")
     @Column
     private String city;
 
