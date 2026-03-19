@@ -2,16 +2,43 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Llistat de Pel·lícules</title>
 </head>
 
 <body>
 
     <h1>LLISTAT DE PELICULES</h1>
 
-    
+    <a th:href="@{/movies/create}">Crear nova pel·lícula</a>
+    <br><br>
+    <table>
+        <tbody>
+            <tr th:each="movie : ${llista}">
+                <td th:text="${movie.title}">Nom</td>
+
+                <td>
+                    <a th:href="@{/screenings/{id}/screenings(id=${movie.id})}">Projeccions</a>
+                </td>
+
+                <td>
+                    <a th:href="@{/screenings/{id}/screenings/create(id=${movie.id})}">Crear nova projecció</a>
+                </td>
+
+                <td>
+                    <a th:href="@{/movies/edit/{id}(id=${movie.id})}">Editar pel·lícula</a>
+                </td>
+
+                <td>
+                    <a th:href="@{/movies/delete/{id}(id=${movie.id})}">Eliminar pel·lícula</a>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
 
 </body>
 

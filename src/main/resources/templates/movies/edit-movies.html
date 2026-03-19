@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Pel·lícula</title>
+</head>
+
+<body>
+    <h1>Editar pel·lícula</h1>
+
+    <form th:action="@{/movies/edit}" th:object="${movie}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Títol:</label>
+        <input type="text" th:field="*{title}" /><br/>
+
+        <label>Duració (minuts):</label>
+        <input type="number" th:field="*{duration}" /><br/>
+
+        <label>Gènere:</label>
+        <input type="text" th:field="*{genre}" /><br/>
+
+        <label>Descripció:</label>
+        <textarea th:field="*{description}"></textarea><br/>
+
+        <label>Data d'estrena:</label>
+        <input type="date" th:field="*{releaseDate}" /><br/>
+
+        <button type="submit">Guardar</button>
+    </form>
+
+    <a th:href="@{/movies}">Tornar al llistat</a>
+</body>
+
+</html>

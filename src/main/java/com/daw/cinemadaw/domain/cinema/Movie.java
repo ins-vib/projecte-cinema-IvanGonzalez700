@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -24,9 +25,9 @@ public class Movie {
     @Column(nullable = false, length = 200)
     private String title;
 
-    @NotBlank(message="la duracio")
+    @NotNull(message="la duracio")
     @Column(name = "duration_minutes", nullable = false)
-    private int duration;
+    private Integer duration;
 
     @NotBlank(message="el genere")
     @Size(min = 2, max = 100, message = "el genere")
@@ -38,12 +39,12 @@ public class Movie {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotBlank(message="la data de sortida")
+    @NotNull(message="la data de sortida")
     @Column(name = "release_date")
-    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
 
-    public Movie(String title, int duration, String genre, String description, LocalDate releaseDate) {
+    public Movie(String title, Integer duration, String genre, String description, LocalDate releaseDate) {
         this.title = title;
         this.duration = duration;
         this.genre = genre;
@@ -70,11 +71,11 @@ public class Movie {
         this.title = title;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 

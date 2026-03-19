@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeccions</title>
+</head>
+
+<body>
+    <h1>Projeccions de <span th:text="${movie.title}"></span></h1>
+
+    <a th:href="@{/screenings/{id}/screenings/create(id=${movie.id})}">Crear nova projecció</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data i hora</th>
+                <th>Preu</th>
+                <th>Sala</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="screening : ${screenings}">
+                <td th:text="${screening.screeningDateTime}">Data</td>
+                <td th:text="${screening.price}">Preu</td>
+                <td th:text="${screening.room.name}">Sala</td>
+                <td>
+                    <a
+                        th:href="@{/screenings/{movieId}/screenings/edit/{screeningId}(movieId=${movie.id}, screeningId=${screening.id})}">Editar</a>
+                </td>
+                <td>
+                    <a
+                        th:href="@{/screenings/{movieId}/screenings/delete/{screeningId}(movieId=${movie.id}, screeningId=${screening.id})}">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/movies}">Tornar al llistat</a>
+</body>
+
+</html>

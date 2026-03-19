@@ -1,30 +1,45 @@
-<h1>EDIT YOUR CINEMA</h1>
+<!DOCTYPE html>
+<html lang="en">
 
-<form th:action="@{/cinemes/update}" method="post" th:object="${cinema}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>EDIT YOUR CINEMA</h1>
+
+    <form th:action="@{/cinemes/update}" method="post" th:object="${cinema}">
 
 
-    <input hidden type="text" th:field="*{id}">
+        <input hidden type="text" th:field="*{id}">
 
-    <label>Nom:</label>
-    <input type="text" th:field="*{name}">
-    <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-    <br>
+        <label>Nom:</label>
+        <input type="text" th:field="*{name}">
+        <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <br>
 
-    <label>Adreça:</label>
-    <input type="text" th:field="*{address}">
-    <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
-    <br>
+        <label>Adreça:</label>
+        <input type="text" th:field="*{address}">
+        <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+        <br>
 
-    <label>City:</label>
-    <input type="text" th:field="*{city}">
-    <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
-    <br>
+        <label>City:</label>
+        <input type="text" th:field="*{city}">
+        <div th:if="${#fields.hasErrors('city')}" th:errors="*{city}"></div>
+        <br>
 
-    <label>Codi:</label>
-    <input type="text" th:field="*{postalCode}">
-    <div th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
-    <br>
+        <label>Codi:</label>
+        <input type="text" th:field="*{postalCode}">
+        <div th:if="${#fields.hasErrors('postalCode')}" th:errors="*{postalCode}"></div>
+        <br>
 
-    <button type="submit">Confirmar canvis</button>
+        <button type="submit">Confirmar canvis</button>
 
-</form>
+    </form>
+</body>
+
+</html>
