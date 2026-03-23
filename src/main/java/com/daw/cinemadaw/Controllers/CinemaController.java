@@ -72,7 +72,6 @@ public class CinemaController {
     //Donar de alta el cinema
     @PostMapping("/cinemes/create")
     public String alta(@Valid @ModelAttribute Cinema cinema, BindingResult result) {
-
         if (result.hasErrors()) {
             return "cinemes/create-cinema";
         }
@@ -93,7 +92,17 @@ public class CinemaController {
 
     @PostMapping("/cinemes/update")
     public String edit(@ModelAttribute Cinema cinema) {
-        cinemaRepository.save(cinema);
+        Optional<Cinema> existingOpt = cinemaRepository.findById(cinema.getId());
+        if (existingOpt.isEmpty()) {
+            return "redirect:/cinemes";
+        }
+        //per a que les rooms d'aquest cinema no s'esborrin (si no JPA repository s'enfada)
+        Cinema existing = existingOpt.get();
+        existing.setName(cinema.getName());
+        existing.setAddress(cinema.getAddress());
+        existing.setCity(cinema.getCity());
+        existing.setPostalCode(cinema.getPostalCode());
+        cinemaRepository.save(existing);
         return "redirect:/cinemes";
     }
 

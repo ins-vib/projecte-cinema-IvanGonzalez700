@@ -92,7 +92,7 @@ public class RoomController {
     oldRoom.setName(room.getName());
     oldRoom.setCapacity(room.getCapacity());
     roomRepository.save(oldRoom);
-    return "redirect:/cinema/"+oldRoom.getCinema().getId();
+    return "redirect:/cinemes/"+oldRoom.getCinema().getId();
 
     }
 
@@ -103,7 +103,7 @@ public class RoomController {
         model.addAttribute("room", room);
         model.addAttribute("cinemaId",cinemaId);
 
-        return "rooms/create";
+        return "rooms/create-room";
 
     }
 
@@ -122,7 +122,7 @@ public class RoomController {
         room.setCinema(cinema);
         roomRepository.save(room);
 
-        return "redirect:/cinema/"+cinemaId;
+        return "redirect:/cinemes/"+cinemaId;
     }
 
 }

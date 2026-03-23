@@ -12,7 +12,7 @@
 
 
     <h2>CREAR SALA:</h2>
-    <form th:action="@{/cinemes/{cinemaId}/rooms(cinemaId=${cinemaId})}" th:object="${room}" method="post">
+    <form th:action="@{/rooms/create/{cinemaId}(cinemaId=${cinemaId})}" th:object="${room}" method="post">
 
         <label>Títol:</label><br>
         <input type="text" th:field="*{name}" /><br><br>
