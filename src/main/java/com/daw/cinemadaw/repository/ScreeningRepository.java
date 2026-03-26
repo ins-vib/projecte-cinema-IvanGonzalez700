@@ -1,5 +1,6 @@
 package com.daw.cinemadaw.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,8 @@ import com.daw.cinemadaw.domain.cinema.Screening;
 @Repository
 public interface ScreeningRepository extends JpaRepository<Screening, Long> {
     List<Screening> findByMovie(Movie movie);
+
+    List<Screening> findByMovieAndScreeningDateTimeGreaterThanEqualOrderByScreeningDateTimeAsc(
+        Movie movie, LocalDateTime dateTime
+    );
 }

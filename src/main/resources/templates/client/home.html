@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -11,11 +12,23 @@
 
 
     <h1>Pel·lícules disponibles</h1>
-
-    <div th:each="movie : ${movies}">
-        <h3 th:text="${movie.title}"></h3>
-    </div>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Sessions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="movie : ${movies}">
+                <td th:text="${movie.title}">Nom</td>
+                <td>
+                    <a href="/">Veure Screenings</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
     <a href="/logout">Logout</a>
 
 </body>

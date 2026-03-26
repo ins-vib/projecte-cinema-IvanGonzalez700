@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
@@ -12,7 +13,9 @@
     <h1>Panell d'Administració</h1>
     <p>Benvingut administrador</p>
 
-    <a href="/logout">Logout</a>
+    <a th:href="@{/}">Anar a Home</a>
+    <br><br>
+    <a th:href="@{/logout}">Logout</a>
 
 </body>
 
