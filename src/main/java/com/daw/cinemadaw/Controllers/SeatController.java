@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.repository.RoomRepository;
+import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
 
 @Controller
@@ -20,10 +22,12 @@ public class SeatController {
 
     private final RoomRepository roomRepository;
     private final SeatRepository seatRepository;
+    private final ScreeningRepository screeningRepository;
 
-    public SeatController(RoomRepository roomRepository, SeatRepository seatRepository) {
+    public SeatController(RoomRepository roomRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository) {
         this.roomRepository = roomRepository;
         this.seatRepository = seatRepository;
+        this.screeningRepository = screeningRepository;
     }
 
     @GetMapping("/room/{id}")
@@ -98,6 +102,21 @@ public class SeatController {
             return "redirect:/room/" + roomId;
         }
         return "redirect:/cinema";
+    }
+
+    @GetMapping("/entrades/{screeningId}")
+    public String showEntrades(@PathVariable Long screeningId, Model model) {
+        Optional<Screening> optionalScreening = screeningRepository.findById(screeningId);
+        if (optionalScreening.isPresent()) {
+            Screening screening = optionalScreening.get();
+            Room room = screening.getRoom();
+            List<Seat> seats = room.getSeats();
+            model.addAttribute("room", room);
+            model.addAttribute("seats", seats);
+            model.addAttribute("screening", screening);
+            return "seats/entrades";
+        }
+        return "redirect:/movies";
     }
 
 }

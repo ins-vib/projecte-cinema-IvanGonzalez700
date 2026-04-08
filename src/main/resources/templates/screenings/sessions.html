@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css">
+    <title>Sessions</title>
+</head>
+<body>
+    <h1>Projeccions de <span th:text="${movie.title}"></span></h1>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data i hora</th>
+                <th>Preu</th>
+                <th>Sala</th>
+                <th>Entrades</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="screening : ${screenings}">
+                <td th:text="${screening.screeningDateTime}">Data</td>
+                <td th:text="${screening.price}">Preu</td>
+                <td th:text="${screening.room.name}">Sala</td>
+                <td>
+                    <a th:href="@{/entrades/{id}(id=${screening.id})}">Seients</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a th:href="@{/login}">Tornar al llistat</a>
+</body>
+</html>

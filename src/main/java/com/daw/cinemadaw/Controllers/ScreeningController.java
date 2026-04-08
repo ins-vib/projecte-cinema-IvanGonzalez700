@@ -108,7 +108,7 @@ public class ScreeningController {
         return "redirect:/screenings/" + movieId + "/screenings";
     }
 
-        @GetMapping("/movies/delete/{id}")
+    @GetMapping("/movies/delete/{id}")
     public String deleteMovie(@PathVariable Long id) {
         Optional<Movie> optional = movieRepository.findById(id);
         if (optional.isPresent()) {
@@ -119,4 +119,19 @@ public class ScreeningController {
         }
         return "redirect:/movies";
     }
+
+
+    @GetMapping("/sessions/{movieId}/sessions")
+    public String sessions(@PathVariable Long movieId, Model model) {
+        Optional<Movie> optional = movieRepository.findById(movieId);
+        if (optional.isPresent()) {
+            Movie movie = optional.get();
+            List<Screening> screenings = screeningRepository.findByMovie(movie);
+            model.addAttribute("movie", movie);
+            model.addAttribute("screenings", screenings);
+            return "screenings/sessions";
+        }
+        return "redirect:/movies";
+    }
 }
+

@@ -23,7 +23,7 @@
             <tr th:each="movie : ${movies}">
                 <td th:text="${movie.title}">Nom</td>
                 <td>
-                    <a href="/">Veure Screenings</a>
+                    <a th:href="@{/sessions/{movieId}/sessions(movieId=${movie.id})}">Veure Sessions</a>
                 </td>
             </tr>
         </tbody>

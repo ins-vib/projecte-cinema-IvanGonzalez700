@@ -58,5 +58,7 @@ public class HomeController {
             .findByMovieAndScreeningDateTimeGreaterThanEqualOrderByScreeningDateTimeAsc(movie, LocalDateTime.now()));
         return "client/movie-detail";
     }
+
+    
 }
 
