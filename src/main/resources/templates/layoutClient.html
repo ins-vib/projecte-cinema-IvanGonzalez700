@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinemaDaw - El Teu Cinema Online</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    
+    <nav class="landing-nav">
+        <div class="landing-logo">CinemaDaw</div>
+        <div class="landing-nav-links">
+            <a href="#pelicules">Pel·lícules</a>
+            <a href="#cinemes">Cinemes</a>
+            <a href="#login">Login</a>
+            <a href="#register">Registre</a>
+        </div>
+    </nav>
+
+    
+    <header class="landing-header">
+        <section class="hero-section">
+            <h1>Benvingut a CinemaDaw</h1>
+            <p>Descobreix les millors pel·lícules i reserva les teves entrades en línia</p>
+            <div class="hero-buttons">
+                <a href="/login" class="btn-primary">Accedir</a>
+                <a href="/register" class="btn-secondary">Crear Compte</a>
+            </div>
+        </section>
+    </header>
+
+    
+    <main>
+        
+        <section class="features-section">
+            <h2 class="section-title">Per Què Triar CinemaDaw?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Fàcil de Reservar</h3>
+                    <p>Selecciona els teus seients preferits i compra les entrades en tan sols uns clicks</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Accés Des de Qualsevol Lloc</h3>
+                    <p>Amb la nostra plataforma responsive, pots reservar des del teu telèfon o ordinador</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Pagament Segur</h3>
+                    <p>Procés de pagament segur i protegit amb les millors mesures de seguretat</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Les Millors Pel·lícules</h3>
+                    <p>Accés al catàleg més complet de pel·lícules en cartell</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Notificacions</h3>
+                    <p>Rep notificacions sobre les teves pre-reserves i estrenes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"></div>
+                    <h3>Múltiples Cinemes</h3>
+                    <p>Tria entre els nostres cinemes associats a tota Catalunya</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="movies-section">
+            <h2 class="section-title" id="pelicules">Films en Cartell</h2>
+            <div class="movies-grid">
+                <div class="movie-card">
+                    <h3>La Gran Aventura</h3>
+                    <p>Acció, Aventura</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="movie-card">
+                    <h3>Amor a la Llum de la Lluna</h3>
+                    <p>Romance, Drama</p>
+                    <div class="rating">⭐⭐⭐⭐</div>
+                </div>
+                <div class="movie-card">
+                    <h3>Misteri en les Muntanyes</h3>
+                    <p>Thriller, Misteri</p>
+                    <div class="rating">⭐⭐⭐⭐⭐</div>
+                </div>
+                <div class="movie-card">
+                    <h3>Rir és Viure</h3>
+                    <p>Comèdia</p>
+                    <div class="rating">⭐⭐⭐⭐</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <h2>Preparat per a l'Experiència?</h2>
+            <p>Crea el teu compte ara i comença a reservar les teves entrades</p>
+            <a href="/register" class="btn-primary">Registre-t Ara</a>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <p><strong>CinemaDaw © 2026</strong></p>
+        <p>La millor plataforma per comprar entrades de cinema</p>
+        <p>
+            <a href="#contacte">Contacte</a> | 
+            <a href="#privacy">Privacitat</a> | 
+            <a href="#condicions">Condicions</a>
+        </p>
+        <p>Desenvolupat per DAW1 2026</p>
+    </footer>
+</body>
+
+</html>

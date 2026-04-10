@@ -337,7 +337,312 @@ strong, b {
     font-weight: 600;
 }
 
-/* Evitar los br dobles que afean el html */
 br + br {
     display: none;
+}
+
+.landing-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: rgba(44, 62, 80, 0.95);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-sizing: border-box;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.landing-logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #3498db;
+    text-decoration: none;
+}
+
+.landing-nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.landing-nav-links a {
+    color: #ecf0f1;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.landing-nav-links a:hover {
+    background-color: rgba(52, 152, 219, 0.5);
+    color: white;
+}
+
+.landing-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 0;
+    margin: 0;
+    padding-top: 60px;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 100px 40px;
+    text-align: center;
+    margin: 0;
+}
+
+.hero-section h1 {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.hero-section p {
+    font-size: 1.3em;
+    margin-bottom: 30px;
+    color: #ecf0f1;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+    padding: 15px 40px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: white;
+    padding: 15px 40px;
+    border: 2px solid white;
+    border-radius: 6px;
+    font-size: 1.1em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background-color: white;
+    color: #2c3e50;
+    transform: translateY(-2px);
+    text-decoration: none;
+}
+
+.features-section {
+    padding: 80px 40px;
+    background-color: #f4f6f8;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 50px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: #7f8c8d;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+.movies-section {
+    padding: 80px 40px;
+    background-color: white;
+}
+
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.movie-card {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    padding: 30px 20px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.movie-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+}
+
+.movie-card h3 {
+    color: white;
+    margin-bottom: 10px;
+}
+
+.movie-card .rating {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.cta-section h2 {
+    color: white;
+    font-size: 2.2em;
+    margin-bottom: 20px;
+}
+
+.cta-section p {
+    color: #ecf0f1;
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+.landing-footer {
+    background-color: #1a252f;
+    color: #ecf0f1;
+    padding: 40px;
+    text-align: center;
+    margin: 0;
+}
+
+.landing-footer p {
+    margin: 10px 0;
+    color: #bdc3c7;
+}
+
+.landing-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.landing-footer a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* Landing page main */
+body.landing main {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    flex: none;
+}
+
+/* Responsive Landing Page */
+@media (max-width: 768px) {
+    .landing-nav {
+        flex-direction: column;
+        padding: 15px 20px;
+    }
+
+    .landing-nav-links {
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .hero-section {
+        padding: 60px 20px;
+    }
+
+    .hero-section h1 {
+        font-size: 2em;
+    }
+
+    .hero-section p {
+        font-size: 1em;
+    }
+
+    .section-title {
+        font-size: 1.8em;
+    }
+
+    .features-section,
+    .movies-section,
+    .cta-section {
+        padding: 40px 20px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+    }
 }

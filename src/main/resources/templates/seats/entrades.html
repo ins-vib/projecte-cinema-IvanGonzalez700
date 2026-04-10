@@ -62,7 +62,7 @@
 
     <h2>SCREEN</h2>
 
-    <form th:action="@{/entrades/{screeningId}/comprar(screeningId=${screening.id})}" method="post">
+    <form th:action="@{/session/validarCompra(screeningId=${screening.id})}" method="post">
         <div class="seats-grid">
             <div class="seat-item" th:each="seat : ${seats}">
                 <input type="checkbox" th:name="seatIds" th:value="${seat.id}" th:id="'seat-' + ${seat.id}"

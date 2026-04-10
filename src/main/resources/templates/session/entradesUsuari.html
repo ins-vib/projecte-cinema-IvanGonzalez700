@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Les Meves Entrades</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+    <h1>Les Meves Entrades Comprades</h1>
+
+    <div th:if="${entrades != null and !entrades.isEmpty()}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Pel·lícula</th>
+                    <th>Data i Hora</th>
+                    <th>Cinema</th>
+                    <th>Sala</th>
+                    <th>Seient</th>
+                    <th>Preu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="entrada : ${entrades}">
+                    <td th:text="${entrada.screening.movie.title}">Títol de la pel·lícula</td>
+                    <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Data i
+                        hora</td>
+                    <td th:text="${entrada.screening.room.cinema.name}">Nom del cinema</td>
+                    <td th:text="${entrada.screening.room.name}">Nom de la sala</td>
+                    <td th:text="${entrada.seat.y + ', ' + entrada.seat.x}">Fila i número del seient</td>
+                    <td th:text="${entrada.screening.price + ' €'}">Preu</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:if="${entrades == null or entrades.isEmpty()}">
+        <p>No has comprat cap entrada encara.</p>
+    </div>
+
+    <br>
+    <a th:href="@{/client}">Tornar a l'inici</a>
+    <br>
+    <a th:href="@{/logout}">Logout</a>
+</body>
+
+</html>

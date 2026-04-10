@@ -153,7 +153,20 @@ public class SeatController {
                 }
             }
         }
-        return "redirect:/entrades/" + screeningId;
+        return "redirect:/entrades/" + screeningId + "/comprades";
+    }
+
+    @GetMapping("/entrades/{screeningId}/comprades")
+    public String showEntradesComprades(@PathVariable Long screeningId, Model model) {
+        Optional<Screening> optionalScreening = screeningRepository.findById(screeningId);
+        if (optionalScreening.isPresent()) {
+            Screening screening = optionalScreening.get();
+            List<Entrada> entrades = entradaRepository.findByScreening(screening);
+            model.addAttribute("entrades", entrades);
+            model.addAttribute("screening", screening);
+            return "session/entradesUsuari";
+        }
+        return "redirect:/movies";
     }
 
 }
