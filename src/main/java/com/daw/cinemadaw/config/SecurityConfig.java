@@ -30,7 +30,7 @@ public class SecurityConfig {
 
             // Rutes protegides per rol
             .requestMatchers("/admin/**","/cinemes/**","/movies/**","/seats/**","/rooms/**").hasRole("ADMIN")
-            .requestMatchers("/client/**").hasAnyRole("CLIENT", "ADMIN")
+            .requestMatchers("/client/**", "/entrades/**", "/sessions/**").hasAnyRole("CLIENT", "ADMIN")
 
             // Qualsevol altra petició necessita autenticació
             .anyRequest().authenticated()

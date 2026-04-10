@@ -1,7 +1,9 @@
 package com.daw.cinemadaw.Controllers;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.daw.cinemadaw.domain.cinema.Entrada;
 import com.daw.cinemadaw.domain.cinema.Room;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.repository.EntradaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
@@ -23,11 +28,14 @@ public class SeatController {
     private final RoomRepository roomRepository;
     private final SeatRepository seatRepository;
     private final ScreeningRepository screeningRepository;
+    private final EntradaRepository entradaRepository;
 
-    public SeatController(RoomRepository roomRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository) {
+    public SeatController(RoomRepository roomRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository,
+            EntradaRepository entradaRepository) {
         this.roomRepository = roomRepository;
         this.seatRepository = seatRepository;
         this.screeningRepository = screeningRepository;
+        this.entradaRepository = entradaRepository;
     }
 
     @GetMapping("/room/{id}")
@@ -111,12 +119,41 @@ public class SeatController {
             Screening screening = optionalScreening.get();
             Room room = screening.getRoom();
             List<Seat> seats = room.getSeats();
+            List<Entrada> entradas = entradaRepository.findByScreening(screening);
+            Set<Long> entradaSeatIds = new HashSet<>();
+            for (Entrada entrada : entradas) {
+                entradaSeatIds.add(entrada.getSeat().getId());
+            }
             model.addAttribute("room", room);
             model.addAttribute("seats", seats);
             model.addAttribute("screening", screening);
+            model.addAttribute("entradaSeatIds", entradaSeatIds);
             return "seats/entrades";
         }
         return "redirect:/movies";
+    }
+
+    @PostMapping("/entrades/{screeningId}/comprar")
+    public String comprarEntradas(
+            @PathVariable Long screeningId,
+            @RequestParam(required = false) List<Long> seatIds) {
+        Optional<Screening> optionalScreening = screeningRepository.findById(screeningId);
+        if (optionalScreening.isPresent() && seatIds != null) {
+            Screening screening = optionalScreening.get();
+            for (Long seatId : seatIds) {
+                Optional<Seat> optionalSeat = seatRepository.findById(seatId);
+                if (optionalSeat.isPresent()) {
+                    Seat seat = optionalSeat.get();
+                    if (seat.getRoom() != null && screening.getRoom() != null
+                            && seat.getRoom().getId().equals(screening.getRoom().getId())
+                            && !entradaRepository.existsByScreeningAndSeat(screening, seat)) {
+                        Entrada entrada = new Entrada(screening, seat);
+                        entradaRepository.save(entrada);
+                    }
+                }
+            }
+        }
+        return "redirect:/entrades/" + screeningId;
     }
 
 }
