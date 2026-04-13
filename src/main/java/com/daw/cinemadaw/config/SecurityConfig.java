@@ -27,9 +27,19 @@ public class SecurityConfig {
             // Accés públic
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/login", "/register", "/css/**", "/", "/cookies/**").permitAll()
+            .requestMatchers("/cinemes", "/cinemes/**").permitAll()
+            .requestMatchers("/movies", "/movies/user").permitAll()
+            .requestMatchers("/news", "/news/**").permitAll()
+            .requestMatchers("/screenings/**").permitAll()
 
-            // Rutes protegides per rol
-            .requestMatchers("/admin/**","/cinemes/**","/movies/**","/seats/**","/rooms/**").hasRole("ADMIN")
+            // Rutes protegides per rol - ADMIN
+            .requestMatchers("/movies/create", "/movies/edit/**", "/admin/**").hasRole("ADMIN")
+            .requestMatchers("/cinemes/create", "/cinemes/edit/**").hasRole("ADMIN")
+            .requestMatchers("/seats/**").hasRole("ADMIN")
+            .requestMatchers("/rooms/**").hasRole("ADMIN")
+            
+            // Rutes protegides per rol - CLIENT
+            .requestMatchers("/carrito/**").hasAnyRole("CLIENT", "ADMIN")
             .requestMatchers("/client/**", "/entrades/**", "/sessions/**").hasAnyRole("CLIENT", "ADMIN")
 
             // Qualsevol altra petició necessita autenticació
@@ -46,7 +56,7 @@ public class SecurityConfig {
         // Configuració del logout
         .logout(logout -> logout
             .logoutUrl("/logout")
-            .logoutSuccessUrl("/login?logout")
+            .logoutSuccessUrl("/")
             .permitAll()
         );
 

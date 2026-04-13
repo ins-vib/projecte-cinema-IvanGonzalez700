@@ -5,56 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selecció de Seients</title>
-    <style>
-        .seats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, 50px);
-            gap: 10px;
-            padding: 20px;
-            max-width: 600px;
-        }
-
-        .seat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .seat-item input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            accent-color: #097be5;
-        }
-
-        .seat-item label {
-            font-size: 12px;
-            margin-top: 4px;
-            cursor: pointer;
-        }
-
-        .btn-submit {
-            margin-top: 20px;
-            padding: 10px 24px;
-            background-color: #097be5;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/room.css">
 </head>
 
 <body>
@@ -62,13 +13,13 @@
 
     <h2>SCREEN</h2>
 
-    <form th:action="@{/session/validarCompra(screeningId=${screening.id})}" method="post">
+    <form th:action="@{/entrades/{screeningId}/comprar(screeningId=${screening.id})}" method="post">
         <div class="seats-grid">
             <div class="seat-item" th:each="seat : ${seats}">
                 <input type="checkbox" th:name="seatIds" th:value="${seat.id}" th:id="'seat-' + ${seat.id}"
-                    th:disabled="${entradaSeatIds.contains(seat.id)}" />
+                    th:disabled="${entradaSeatIds.contains(seat.id)}" th:class="'seat-checkbox ' + ${seat.type}" />
                 <label th:for="'seat-' + ${seat.id}"
-                    th:text="${seat.y + ', ' + seat.x + (entradaSeatIds.contains(seat.id) ? ' (ocupado)' : '')}">
+                    th:text="${seat.y + ', ' + seat.x + (entradaSeatIds.contains(seat.id) ? ' (X)' : '')}">
                 </label>
             </div>
         </div>

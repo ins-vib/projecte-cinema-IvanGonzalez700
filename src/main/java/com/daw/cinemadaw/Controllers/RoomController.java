@@ -53,12 +53,11 @@ public class RoomController {
         return "rooms/detall-room";
     }
 
-    // delete
     @GetMapping("rooms/{id}/delete")
     public String delete(@PathVariable Long id){
         Optional<Room>optional =roomRepository.findById(id);
         Long cinemaId=null;
-        Room room =null;
+        Room room = null;
 
         if(optional.isPresent()){
             room= optional.get();

@@ -30,9 +30,8 @@ public class HomeController {
     // Pàgina principal
     @GetMapping("/")    
     public String home(Model model) {
-    
-        // ...
-
+        // Mostrar películas populares en página inicial
+        model.addAttribute("movies", movieRepository.findAll());
         return "homelogin/home";
     } 
 

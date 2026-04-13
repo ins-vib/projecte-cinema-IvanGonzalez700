@@ -112,7 +112,6 @@ public class ScreeningController {
     public String deleteMovie(@PathVariable Long id) {
         Optional<Movie> optional = movieRepository.findById(id);
         if (optional.isPresent()) {
-            // Primer eliminar totes les projeccions associades
             List<Screening> screenings = screeningRepository.findByMovie(optional.get());
             screeningRepository.deleteAll(screenings);
             movieRepository.delete(optional.get());

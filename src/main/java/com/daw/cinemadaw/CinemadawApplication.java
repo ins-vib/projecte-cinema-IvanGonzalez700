@@ -9,6 +9,4 @@ public class CinemadawApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CinemadawApplication.class, args);
 	}
-
 }
-

@@ -1,5 +1,7 @@
 package com.daw.cinemadaw.domain.cinema;
 
+import com.daw.cinemadaw.domain.user.User;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +20,9 @@ public class Entrada {
 
     @ManyToOne
     private Seat seat;
+    
+    @ManyToOne
+    private User user;
 
     public Entrada() {
     }
@@ -25,6 +30,12 @@ public class Entrada {
     public Entrada(Screening screening, Seat seat) {
         this.screening = screening;
         this.seat = seat;
+    }
+    
+    public Entrada(Screening screening, Seat seat, User user) {
+        this.screening = screening;
+        this.seat = seat;
+        this.user = user;
     }
 
     public Long getId() {
@@ -45,5 +56,13 @@ public class Entrada {
 
     public void setSeat(Seat seat) {
         this.seat = seat;
+    }
+    
+    public User getUser() {
+        return user;
+    }
+    
+    public void setUser(User user) {
+        this.user = user;
     }
 }

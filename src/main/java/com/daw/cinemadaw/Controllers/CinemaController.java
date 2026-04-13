@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 @Controller
 public class CinemaController {
 
-    private CinemaRepository cinemaRepository;
+    private final CinemaRepository cinemaRepository;
 
     public CinemaController(CinemaRepository cinemaRepository) {
         this.cinemaRepository = cinemaRepository;
@@ -31,6 +31,13 @@ public class CinemaController {
         List<Cinema> cinemes = cinemaRepository.findAll();
         model.addAttribute("llista", cinemes);
         return "cinemes/cinemes";
+    }
+
+    @GetMapping("/cinemes/user")
+    public String cinemasForUser(Model model){
+        List<Cinema> cinemes = cinemaRepository.findAll();
+        model.addAttribute("llista", cinemes);
+        return "cinemes/cinemesUsuari";
     }
 
     //detalls del cinema

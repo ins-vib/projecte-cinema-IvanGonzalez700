@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Llista Cinemes</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Ciutat</th>
+                <th>Codi Postal</th>
+                <th>Adreça</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cinema : ${llista}">
+                <td th:text="${cinema.name}">Nom</td>
+                <td th:text="${cinema.city}">Ciutat</td>
+                <td th:text="${cinema.postalCode}">Codi Postal</td>
+                <td th:text="${cinema.address}">Adreça</td> 
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>

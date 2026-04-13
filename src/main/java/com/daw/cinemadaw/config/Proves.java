@@ -22,10 +22,10 @@ import jakarta.transaction.Transactional;
 @Component
 public class Proves implements CommandLineRunner {
 
-    private CinemaRepository cinemaRepository;
-    private RoomRepository roomRepository;
-    private SeatRepository seatRepository;
-    private UserRepository userRepository;
+    final private CinemaRepository cinemaRepository;
+    final private RoomRepository roomRepository;
+    final private SeatRepository seatRepository;
+    final private UserRepository userRepository;
     BCryptPasswordEncoder encoder;
     
     public Proves(CinemaRepository cinemaRepository, RoomRepository roomRepository, SeatRepository seatRepository, UserRepository userRepository, BCryptPasswordEncoder encoder) {
@@ -69,11 +69,5 @@ public class Proves implements CommandLineRunner {
     client.setPassword(encoder.encode("1234"));
     client.setRole(Role.CLIENT);
     userRepository.save(client);
-
-
-    }
-
-
-
-    
+    }    
 }

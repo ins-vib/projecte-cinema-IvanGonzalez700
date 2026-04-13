@@ -8,11 +8,13 @@ import org.springframework.stereotype.Repository;
 import com.daw.cinemadaw.domain.cinema.Entrada;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.user.User;
 
 @Repository
 public interface EntradaRepository extends JpaRepository<Entrada, Long> {
 
     boolean existsByScreeningAndSeat(Screening screening, Seat seat);
     List<Entrada> findByScreening(Screening screening);
+    List<Entrada> findByUser(User user);
     
 }

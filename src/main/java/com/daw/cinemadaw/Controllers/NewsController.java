@@ -20,7 +20,7 @@ public class NewsController {
         try {
             llista = newsService.GetNews();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            //log
         }
         model.addAttribute("llista", llista);
         return "news/news";

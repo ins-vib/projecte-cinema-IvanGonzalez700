@@ -30,6 +30,14 @@ public class MovieController {
         return "movies/movies";
     }
 
+    
+    @GetMapping("/movies/user")
+    public String moviesForUser(Model model) {
+        List<Movie> movies = movieRepository.findAll();
+        model.addAttribute("movies", movies);
+        return "movies/moviesUsuari";
+    }
+
         @GetMapping("/movies/create")
     public String createMovieForm(Model model) {
         Movie movie = new Movie();

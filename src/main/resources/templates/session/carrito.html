@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Entradas - Cinema DAW</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+
+    <main>
+        <h1>Mi Carrito de Entradas</h1>
+        
+        <div th:if="${entradas.isEmpty()}" class="carrito-vacio">
+            <p>Tu carrito está vacío. <a href="/movies/user">Ver películas disponibles</a></p>
+        </div>
+        
+        <div th:if="${!entradas.isEmpty()}">
+            <table border="1" cellpadding="10" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Película</th>
+                        <th>Cine</th>
+                        <th>Sala</th>
+                        <th>Fecha y Hora</th>
+                        <th>Asiento</th>
+                        <th>Precio</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entrada : ${entradas}">
+                        <td th:text="${entrada.screening.movie.title}">Nombre Película</td>
+                        <td th:text="${entrada.screening.room.cinema.name}">Cinema</td>
+                        <td th:text="${entrada.screening.room.name}">Sala</td>
+                        <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Fecha</td>
+                        <td th:text="${entrada.seat.seatNumber}">Asiento</td>
+                        <td>
+                            <span th:text="'€' + ${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT')}">Precio</span>
+                        </td>
+                        <td>
+                            <form th:action="@{/carrito/remove/{id}(id=${entrada.id})}" method="POST" style="display:inline;">
+                                <button type="submit" onclick="return confirm('¿Desea eliminar esta entrada?');">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <hr>
+            
+            <div class="resumen-carrito">
+                <h2>Resumen del Pedido</h2>
+                <p>
+                    <strong>Número de Entradas:</strong> 
+                    <span th:text="${entradas.size()}">0</span>
+                </p>
+                <p>
+                    <strong>Total:</strong> 
+                    <span th:text="'€' + ${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}">0,00</span>
+                </p>
+            </div>
+            
+            <div class="acciones-carrito">
+                <form th:action="@{/carrito/clear}" method="POST" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Desea vaciar todo el carrito?');">Vaciar Carrito</button>
+                </form>
+                <button onclick="alert('Pago no implementado aún.');">Proceder al Pago</button>
+                <a href="/movies/user">Continuar Comprando</a>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

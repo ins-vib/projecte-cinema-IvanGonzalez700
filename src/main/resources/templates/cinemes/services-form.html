@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <title>Servicios Cinema</title>
+</head>
+<body>
+
 <form th:action="@{/services}" th:object="${servicesDTO}" method="post">
 
     <form th:action="@{/cinema/services}" th:object="${servicesDTO}" method="post">
