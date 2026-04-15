@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +19,12 @@ import com.daw.cinemadaw.domain.cinema.Entrada;
 import com.daw.cinemadaw.domain.cinema.Room;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.EntradaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
+import com.daw.cinemadaw.repository.UserRepository;
 
 @Controller
 public class SeatController {
@@ -29,13 +33,15 @@ public class SeatController {
     private final SeatRepository seatRepository;
     private final ScreeningRepository screeningRepository;
     private final EntradaRepository entradaRepository;
+    private final UserRepository userRepository;
 
     public SeatController(RoomRepository roomRepository, SeatRepository seatRepository, ScreeningRepository screeningRepository,
-            EntradaRepository entradaRepository) {
+            EntradaRepository entradaRepository, UserRepository userRepository) {
         this.roomRepository = roomRepository;
         this.seatRepository = seatRepository;
         this.screeningRepository = screeningRepository;
         this.entradaRepository = entradaRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/room/{id}")
@@ -140,6 +146,10 @@ public class SeatController {
         Optional<Screening> optionalScreening = screeningRepository.findById(screeningId);
         if (optionalScreening.isPresent() && seatIds != null) {
             Screening screening = optionalScreening.get();
+
+            // Obtener el usuario autenticado
+            User usuarioActual = getAuthenticatedUser();
+
             for (Long seatId : seatIds) {
                 Optional<Seat> optionalSeat = seatRepository.findById(seatId);
                 if (optionalSeat.isPresent()) {
@@ -147,13 +157,13 @@ public class SeatController {
                     if (seat.getRoom() != null && screening.getRoom() != null
                             && seat.getRoom().getId().equals(screening.getRoom().getId())
                             && !entradaRepository.existsByScreeningAndSeat(screening, seat)) {
-                        Entrada entrada = new Entrada(screening, seat);
+                        Entrada entrada = new Entrada(screening, seat, usuarioActual);
                         entradaRepository.save(entrada);
                     }
                 }
             }
         }
-        return "redirect:/entrades/" + screeningId + "/comprades";
+        return "redirect:/carrito";
     }
 
     @GetMapping("/entrades/{screeningId}/comprades")
@@ -169,4 +179,17 @@ public class SeatController {
         return "redirect:/movies";
     }
 
+    /**
+     * Obtiene el usuario autenticado actualmente
+     */
+    private User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            String username = authentication.getName();
+            return userRepository.findByUsername(username).orElse(null);
+        }
+        return null;
+    }
+
 }
+

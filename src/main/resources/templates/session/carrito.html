@@ -10,14 +10,26 @@
 
 <body>
 
+    <header>
+        <h1>Aplicació CinemaDAW</h1>
+        <nav>
+            <a th:href="@{/movies/user}">Movies</a>
+            <a th:href="@{/news}">News</a>
+            <a th:href="@{/cinemes/user}">Cinemes</a>
+            <a th:href="@{/carrito}">Carrito</a>
+            <a th:href="@{/logout}">Logout</a>
+        </nav>
+        <hr>
+    </header>
+
     <main>
         <h1>Mi Carrito de Entradas</h1>
         
-        <div th:if="${entradas.isEmpty()}" class="carrito-vacio">
-            <p>Tu carrito está vacío. <a href="/movies/user">Ver películas disponibles</a></p>
+        <div th:if="${entradas == null or entradas.isEmpty()}" class="carrito-vacio">
+            <p>Tu carrito está vacío. <a th:href="@{/movies/user}">Ver películas disponibles</a></p>
         </div>
         
-        <div th:if="${!entradas.isEmpty()}">
+        <div th:if="${entradas != null and !entradas.isEmpty()}">
             <table border="1" cellpadding="10" cellspacing="0">
                 <thead>
                     <tr>
@@ -36,9 +48,9 @@
                         <td th:text="${entrada.screening.room.cinema.name}">Cinema</td>
                         <td th:text="${entrada.screening.room.name}">Sala</td>
                         <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Fecha</td>
-                        <td th:text="${entrada.seat.seatNumber}">Asiento</td>
+                        <td th:text="${entrada.seat.y + ', ' + entrada.seat.x}">Asiento</td>
                         <td>
-                            <span th:text="'€' + ${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT')}">Precio</span>
+                            <span th:text="${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT') + ' €'}">Precio</span>
                         </td>
                         <td>
                             <form th:action="@{/carrito/remove/{id}(id=${entrada.id})}" method="POST" style="display:inline;">
@@ -59,7 +71,7 @@
                 </p>
                 <p>
                     <strong>Total:</strong> 
-                    <span th:text="'€' + ${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT')}">0,00</span>
+                    <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT') + ' €'}">0,00</span>
                 </p>
             </div>
             
@@ -67,11 +79,19 @@
                 <form th:action="@{/carrito/clear}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Desea vaciar todo el carrito?');">Vaciar Carrito</button>
                 </form>
-                <button onclick="alert('Pago no implementado aún.');">Proceder al Pago</button>
-                <a href="/movies/user">Continuar Comprando</a>
             </div>
         </div>
+        
+        <br>
+        <a th:href="@{/movies/user}">Continuar Comprando</a>
+        <br>
+        <a th:href="@{/}">Tornar a l'inici</a>
     </main>
+
+    <footer>
+        <hr>
+        <p>DAW1 2026</p>
+    </footer>
 
 </body>
 

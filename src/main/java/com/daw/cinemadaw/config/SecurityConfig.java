@@ -1,10 +1,19 @@
 package com.daw.cinemadaw.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.daw.cinemadaw.domain.user.User;
+import com.daw.cinemadaw.repository.UserRepository;
 
 @Configuration
 public class SecurityConfig {
@@ -49,7 +58,19 @@ public class SecurityConfig {
         // Configuració del formulari de login
         .formLogin(form -> form
             .loginPage("/login") // pàgina personalitzada de login
-            .successHandler(new CustomLoginSuccessHandler()) // redirecció segons rol
+            .successHandler((request, response, authentication) -> {
+                List<String> roles = new ArrayList<>();
+                for (GrantedAuthority authority : authentication.getAuthorities()) {
+                    roles.add(authority.getAuthority());
+                }
+                if (roles.contains("ROLE_ADMIN")) {
+                    response.sendRedirect("/admin");
+                } else if (roles.contains("ROLE_CLIENT")) {
+                    response.sendRedirect("/");
+                } else {
+                    response.sendRedirect("/");
+                }
+            })
             .permitAll()
         )
 
@@ -68,4 +89,19 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    // Bean per carregar usuaris
+    @Bean
+    public UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> {
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuari no trobat"));
+            return org.springframework.security.core.userdetails.User
+                    .withUsername(user.getUsername())
+                    .password(user.getPassword())
+                    .roles(user.getRole().name())
+                    .build();
+        };
+    }
+
 }
