@@ -2,17 +2,17 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <link rel="stylesheet" th:href="@{/css/room.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selecció de Seients</title>
-    <link rel="stylesheet" href="/css/room.css">
+
 </head>
 
 <body>
-    <h1>Comprar seients</h1>
-
+    <br>
+        <a th:href="@{/}" style="margin: 333px;"> <<< Inici</a>
     <h2>SCREEN</h2>
-
     <form th:action="@{/entrades/{screeningId}/comprar(screeningId=${screening.id})}" method="post">
         <div class="seats-grid">
             <div class="seat-item" th:each="seat : ${seats}">
@@ -23,9 +23,10 @@
                 </label>
             </div>
         </div>
-
         <button type="submit" class="btn-submit">Comprar</button>
     </form>
+        
+    
 </body>
 
 </html>

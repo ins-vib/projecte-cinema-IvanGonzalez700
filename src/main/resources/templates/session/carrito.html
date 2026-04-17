@@ -11,34 +11,34 @@
 <body>
 
     <main>
-        <h1>Mi Carrito de Entradas</h1>
+        <h1>Carret</h1>
         
         <div th:if="${entradas == null or entradas.isEmpty()}" class="carrito-vacio">
-            <p>Tu carrito está vacío. <a th:href="@{/movies/user}">Ver películas disponibles</a></p>
+            <p>El teu carret está buit. <a th:href="@{/movies/user}">Veure películes disponibles</a></p>
         </div>
         
         <div th:if="${entradas != null and !entradas.isEmpty()}">
             <table border="1" cellpadding="10" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Película</th>
+                        <th>Pel·lícula</th>
                         <th>Cine</th>
                         <th>Sala</th>
-                        <th>Fecha y Hora</th>
-                        <th>Asiento</th>
-                        <th>Precio</th>
-                        <th>Acción</th>
+                        <th>Data i hora</th>
+                        <th>Seient</th>
+                        <th>Preu</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="entrada : ${entradas}">
-                        <td th:text="${entrada.screening.movie.title}">Nombre Película</td>
+                        <td th:text="${entrada.screening.movie.title}">Nom de la pel·lícula</td>
                         <td th:text="${entrada.screening.room.cinema.name}">Cinema</td>
                         <td th:text="${entrada.screening.room.name}">Sala</td>
-                        <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Fecha</td>
-                        <td th:text="${entrada.seat.y + ', ' + entrada.seat.x}">Asiento</td>
+                        <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Data</td>
+                        <td th:text="${entrada.seat.y + ', ' + entrada.seat.x}">Seient</td>
                         <td>
-                            <span th:text="${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT') + ' €'}">Precio</span>
+                            <span th:text="${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT') + ' €'}">Preu</span>
                         </td>
                         <td>
                             <form th:action="@{/carrito/remove/{id}(id=${entrada.id})}" method="POST" style="display:inline;">
@@ -52,9 +52,9 @@
             <hr>
             
             <div class="resumen-carrito">
-                <h2>Resumen del Pedido</h2>
+                <h2>Resum de la comanda</h2>
                 <p>
-                    <strong>Número de Entradas:</strong> 
+                    <strong>Número d'entrades:</strong> 
                     <span th:text="${entradas.size()}">0</span>
                 </p>
                 <p>
@@ -65,19 +65,18 @@
             
             <div class="acciones-carrito">
                 <form th:action="@{/carrito/clear}" method="POST" style="display:inline;">
-                    <button type="submit" onclick="return confirm('¿Desea vaciar todo el carrito?');">Vaciar Carrito</button>
+                    <button type="submit" onclick="return confirm('¿Desea vaciar todo el carrito?');">Buidar carret</button>
                 </form>
                 <form th:action="@{/carrito/checkout}" method="POST" style="display:inline; margin-left: 10px;">
-                    <button type="submit" onclick="return confirm('¿Desea comprar todas las entradas del carrito?');">Comprar entradas</button>
+                    <button type="submit" onclick="return confirm('¿Desea comprar todas las entradas del carrito?');">Comprar entrades (<span th:text="${entradas.size()}">0</span>)</button>
                 </form>
             </div>
         </div>
         
-        <br>
-        <a th:href="@{/movies/user}">Continuar amb la compra</a>
-        <br>
-        <a th:href="@{/}">Tornar a l'inici</a>
         
+        <br>
+        <a th:href="@{/}">Inici</a>
+
     </main>
 
     <footer>

@@ -51,6 +51,8 @@
 h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 30px;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
 
 form {
@@ -58,3 +60,10 @@ form {
             flex-direction: column;
             align-items: center;
         }
+
+a{
+
+    font-size: 23px;
+    text-decoration: none;
+
+}
