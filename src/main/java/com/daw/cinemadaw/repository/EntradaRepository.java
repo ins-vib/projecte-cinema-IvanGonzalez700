@@ -16,5 +16,6 @@ public interface EntradaRepository extends JpaRepository<Entrada, Long> {
     boolean existsByScreeningAndSeat(Screening screening, Seat seat);
     List<Entrada> findByScreening(Screening screening);
     List<Entrada> findByUser(User user);
+    List<Entrada> findByUserAndOrderIsNull(User user);
     
 }

@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.daw.cinemadaw.domain.cinema.Entrada;
+import com.daw.cinemadaw.domain.cinema.Order;
 import com.daw.cinemadaw.domain.cinema.Screening;
 import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.EntradaRepository;
+import com.daw.cinemadaw.repository.OrderRepository;
 import com.daw.cinemadaw.repository.ScreeningRepository;
 import com.daw.cinemadaw.repository.SeatRepository;
 import com.daw.cinemadaw.repository.UserRepository;
@@ -31,6 +33,9 @@ public class CartController {
     private EntradaRepository entradaRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -39,9 +44,7 @@ public class CartController {
     @Autowired
     private SeatRepository seatRepository;
 
-    /**
-     * Muestra el carrito del usuario actual con todas sus entradas
-     */
+    
     @GetMapping
     public String viewCart(Model model) {
         // Obtener usuario autenticado
@@ -51,8 +54,8 @@ public class CartController {
             return "redirect:/login";
         }
 
-        // Obtener todas las entradas del usuario
-        List<Entrada> entradas = entradaRepository.findByUser(usuarioActual);
+        // Obtener todas las entradas del carrito del usuario (sin ordenar todavía)
+        List<Entrada> entradas = entradaRepository.findByUserAndOrderIsNull(usuarioActual);
         
         // Calcular el total
         double total = entradas.stream()
@@ -67,11 +70,7 @@ public class CartController {
         return "session/carrito";
     }
 
-    /**
-     * Agrega una entrada al carrito del usuario
-     * @param screeningId ID de la proyección
-     * @param seatId ID del asiento
-     */
+    
     @PostMapping("/add")
     public String addToCart(
             @RequestParam Long screeningId,
@@ -103,10 +102,7 @@ public class CartController {
         return "redirect:/carrito";
     }
 
-    /**
-     * Elimina una entrada del carrito
-     * @param entradaId ID de la entrada a eliminar
-     */
+
     @PostMapping("/remove/{entradaId}")
     public String removeFromCart(@PathVariable Long entradaId) {
         // Verificar que la entrada pertenece al usuario actual
@@ -120,24 +116,40 @@ public class CartController {
         return "redirect:/carrito";
     }
 
-    /**
-     * Limpia completamente el carrito del usuario
-     */
+
     @PostMapping("/clear")
     public String clearCart() {
         User usuarioActual = getAuthenticatedUser();
         
         if (usuarioActual != null) {
-            List<Entrada> entradasDelUsuario = entradaRepository.findByUser(usuarioActual);
+            List<Entrada> entradasDelUsuario = entradaRepository.findByUserAndOrderIsNull(usuarioActual);
             entradaRepository.deleteAll(entradasDelUsuario);
         }
 
         return "redirect:/carrito";
     }
 
-    /**
-     * Obtiene el usuario autenticado actualmente
-     */
+    @PostMapping("/checkout")
+    public String checkoutCart() {
+        User usuarioActual = getAuthenticatedUser();
+        if (usuarioActual == null) {
+            return "redirect:/login";
+        }
+
+        List<Entrada> entradasCarrito = entradaRepository.findByUserAndOrderIsNull(usuarioActual);
+        if (entradasCarrito.isEmpty()) {
+            return "redirect:/carrito";
+        }
+
+        Order order = new Order(usuarioActual.getId());
+        for (Entrada entrada : entradasCarrito) {
+            order.addEntrada(entrada);
+        }
+
+        orderRepository.save(order);
+        return "session/confirmed";
+    }
+
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         

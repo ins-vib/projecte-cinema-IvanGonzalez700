@@ -10,18 +10,6 @@
 
 <body>
 
-    <header>
-        <h1>Aplicació CinemaDAW</h1>
-        <nav>
-            <a th:href="@{/movies/user}">Movies</a>
-            <a th:href="@{/news}">News</a>
-            <a th:href="@{/cinemes/user}">Cinemes</a>
-            <a th:href="@{/carrito}">Carrito</a>
-            <a th:href="@{/logout}">Logout</a>
-        </nav>
-        <hr>
-    </header>
-
     <main>
         <h1>Mi Carrito de Entradas</h1>
         
@@ -79,13 +67,17 @@
                 <form th:action="@{/carrito/clear}" method="POST" style="display:inline;">
                     <button type="submit" onclick="return confirm('¿Desea vaciar todo el carrito?');">Vaciar Carrito</button>
                 </form>
+                <form th:action="@{/carrito/checkout}" method="POST" style="display:inline; margin-left: 10px;">
+                    <button type="submit" onclick="return confirm('¿Desea comprar todas las entradas del carrito?');">Comprar entradas</button>
+                </form>
             </div>
         </div>
         
         <br>
-        <a th:href="@{/movies/user}">Continuar Comprando</a>
+        <a th:href="@{/movies/user}">Continuar amb la compra</a>
         <br>
         <a th:href="@{/}">Tornar a l'inici</a>
+        
     </main>
 
     <footer>

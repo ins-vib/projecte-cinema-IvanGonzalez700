@@ -24,6 +24,17 @@ public class Entrada {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Order order;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
     public Entrada() {
     }
 

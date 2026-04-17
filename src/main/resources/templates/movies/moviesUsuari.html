@@ -4,38 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Películas - Cinema DAW</title>
+    <title>Pelicules</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 
 <body>
 
     <main>
-        <h1>Películas Disponibles</h1>
+        <h1>Películes disponibles</h1>
         
         <table border="1" cellpadding="10" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Duración</th>
-                    <th>Ver Sesiones</th>
+                    <th>Títol</th>
+                    <th>Sinopsis</th>
+                    <th>Duració</th>
+                    <th>Veure sessions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="movie : ${movies}">
                     <td th:text="${movie.title}">Título de película</td>
                     <td th:text="${movie.description}">Descripción</td>
-                    <td th:text="${movie.duration}">Duración</td> 
+                    <td th:text="${movie.duration}">Duración</td>
                     <td>
-                        <a th:href="@{/sessions/{id}/sessions(id=${movie.id})}">Ver Sesiones</a>
+                        <a th:href="@{/sessions/{id}/sessions(id=${movie.id})}">Veure sessions</a>
                     </td>
                 </tr>
             </tbody>
         </table>
         
         <br>
-        <p><a href="javascript:history.back()">Volver</a></p>
+        <p><a href="javascript:history.back()">Tornar</a></p>
     </main>
 
 </body>

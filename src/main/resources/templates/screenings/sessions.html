@@ -15,6 +15,7 @@
             <tr>
                 <th>Data i hora</th>
                 <th>Preu</th>
+                <th>Cinema</th>
                 <th>Sala</th>
                 <th>Entrades</th>
             </tr>
@@ -23,6 +24,7 @@
             <tr th:each="screening : ${screenings}">
                 <td th:text="${screening.screeningDateTime}">Data</td>
                 <td th:text="${screening.price}">Preu</td>
+                <td th:text="${screening.room.cinema.name}">Cinema</td>
                 <td th:text="${screening.room.name}">Sala</td>
                 <td>
                     <a th:href="@{/entrades/{id}(id=${screening.id})}">Seients</a>
