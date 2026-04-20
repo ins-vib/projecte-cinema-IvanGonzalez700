@@ -45,5 +45,11 @@ public class SessionController {
     public String index() {
         return "session/index";  // Vista per introduir el nom d'usuari
     }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "homelogin/logout";
+    }
 }
     

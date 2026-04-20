@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import com.daw.cinemadaw.domain.user.User;
 import com.daw.cinemadaw.repository.UserRepository;
@@ -35,7 +37,7 @@ public class SecurityConfig {
 
             // Accés públic
             .requestMatchers("/h2-console/**").permitAll()
-            .requestMatchers("/login", "/register", "/css/**", "/", "/cookies/**").permitAll()
+            .requestMatchers("/login", "/register", "/logout-success", "/css/**", "/", "/cookies/**").permitAll()
             .requestMatchers("/cinemes", "/cinemes/**").permitAll()
             .requestMatchers("/movies", "/movies/user").permitAll()
             .requestMatchers("/news", "/news/**").permitAll()
@@ -73,11 +75,12 @@ public class SecurityConfig {
             })
             .permitAll()
         )
-
-        // Configuració del logout
         .logout(logout -> logout
-            .logoutUrl("/logout")
-            .logoutSuccessUrl("/")
+            .logoutRequestMatcher(PathPatternRequestMatcher.pathPattern(HttpMethod.GET, "/logout"))
+            .invalidateHttpSession(true)
+            .clearAuthentication(true)
+            .deleteCookies("JSESSIONID")
+            .logoutSuccessUrl("/logout-success")
             .permitAll()
         );
 

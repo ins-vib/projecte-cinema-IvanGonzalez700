@@ -21,43 +21,39 @@ public class HomeController {
     @Autowired
     private ScreeningRepository screeningRepository;
 
-     // Mostra la pàgina de login
     @GetMapping("/login")
     public String login() {
         return "homelogin/login";
     }
 
-    // Pàgina principal
-    @GetMapping("/")    
+    @GetMapping("/logout-success")
+    public String logout() {
+        return "homelogin/logout";
+    }
+
+    @GetMapping("/")
     public String home(Model model) {
-        // Mostrar películas populares en página inicial
         model.addAttribute("movies", movieRepository.findAll());
         return "homelogin/home";
-    } 
+    }
 
-    // Pàgina d'admin
     @GetMapping("/admin")
     public String admin() {
         return "admin/home";
     }
 
-    // Pàgina de client
     @GetMapping("/client")
     public String client(Model model) {
         model.addAttribute("movies", movieRepository.findAll());
         return "client/home";
     }
 
-    // Detall de pel·lícula amb sessions
     @GetMapping("/client/movie/{id}")
     public String movieDetail(@PathVariable Long id, Model model) {
         Movie movie = movieRepository.findById(id).orElseThrow();
         model.addAttribute("movie", movie);
         model.addAttribute("screenings", screeningRepository
-            .findByMovieAndScreeningDateTimeGreaterThanEqualOrderByScreeningDateTimeAsc(movie, LocalDateTime.now()));
+                .findByMovieAndScreeningDateTimeGreaterThanEqualOrderByScreeningDateTimeAsc(movie, LocalDateTime.now()));
         return "client/movie-detail";
     }
-
-    
 }
-
