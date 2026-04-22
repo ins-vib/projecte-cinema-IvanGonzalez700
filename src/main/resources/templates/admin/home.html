@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ca">
 
 <head>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Panell d'Administració</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 
 <body>
 
-    <h1>Panell d'Administració</h1>
-    <p>Benvingut administrador</p>
+    <header>
+        <h1>Panell d'Administració</h1>
+        <nav>
+            <a th:href="@{/cinemes}">Cinemes</a>
+            <a th:href="@{/movies}">Pel·lícules</a>
+            <a th:href="@{/news}">Notícies</a>
+            <a th:href="@{/}">Home (Panell client)</a>
+            <a th:href="@{/logout}">Logout</a>
+        </nav>
+        <hr>
+    </header>
 
-    <a th:href="@{/}">Anar a Home</a>
-    <br><br>
-    <a th:href="@{/logout}">Logout</a>
+    <main>
+        <h2>Benvingut, administrador!</h2>
+        <p>Des d'aquí pots gestionar tots els recursos del cinema.</p>
+    </main>
+
+    <footer>
+        <hr>
+        <p>DAW1 2026</p>
+    </footer>
 
 </body>
 
