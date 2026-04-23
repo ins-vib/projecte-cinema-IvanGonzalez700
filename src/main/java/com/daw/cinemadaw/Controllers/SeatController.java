@@ -125,11 +125,25 @@ public class SeatController {
             Screening screening = optionalScreening.get();
             Room room = screening.getRoom();
             List<Seat> seats = room.getSeats();
-            List<Entrada> entradas = entradaRepository.findByScreening(screening);
+
+            User usuarioActual = getAuthenticatedUser();
+
+            // Mark seats as occupied if they are purchased OR in another user's cart
+            List<Entrada> entradasCompradas = entradaRepository.findByScreeningAndOrderIsNotNull(screening);
             Set<Long> entradaSeatIds = new HashSet<>();
-            for (Entrada entrada : entradas) {
+            for (Entrada entrada : entradasCompradas) {
                 entradaSeatIds.add(entrada.getSeat().getId());
             }
+
+            // Also mark seats that are in OTHER users' carts as occupied
+            List<Entrada> todasEnCarrito = entradaRepository.findByScreeningAndOrderIsNull(screening);
+            for (Entrada entrada : todasEnCarrito) {
+                // Only block if it belongs to a different user
+                if (usuarioActual == null || !entrada.getUser().getId().equals(usuarioActual.getId())) {
+                    entradaSeatIds.add(entrada.getSeat().getId());
+                }
+            }
+
             model.addAttribute("room", room);
             model.addAttribute("seats", seats);
             model.addAttribute("screening", screening);

@@ -12,6 +12,14 @@
 
     <main>
         <h1>Carret</h1>
+
+        <div th:if="${param.error != null and param.error[0] == 'seats_taken'}" style="background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #f5c6cb;">
+            <strong>⚠️ Els seients seleccionats ja han estat comprats per un altre usuari.</strong> S'han eliminat del teu carret.
+        </div>
+
+        <div th:if="${param.error != null and param.error[0] == 'duplicate'}" style="background-color: #fff3cd; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #ffc107;">
+            <strong>🎟️ Aquesta entrada ja la tens al carret.</strong> No pots afegir el mateix seient dues vegades.
+        </div>
         
         <div th:if="${entradas == null or entradas.isEmpty()}" class="carrito-vacio">
             <p>El teu carret está buit. <a th:href="@{/movies/user}">Veure películes disponibles</a></p>

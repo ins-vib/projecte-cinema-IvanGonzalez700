@@ -88,14 +88,26 @@ public class CartController {
         Optional<Seat> seatOpt = seatRepository.findById(seatId);
 
         if (screeningOpt.isPresent() && seatOpt.isPresent()) {
-            // Crear nueva entrada
-            Entrada entrada = new Entrada(
-                screeningOpt.get(),
-                seatOpt.get(),
-                usuarioActual
-            );
+            Screening screening = screeningOpt.get();
+            Seat seat = seatOpt.get();
 
-            // Guardar en el carrito
+            // Comprobar si el usuario ya tiene esta entrada en el carrito
+            boolean yaEnCarrito = entradaRepository
+                    .existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat, usuarioActual);
+
+            if (yaEnCarrito) {
+                return "redirect:/carrito?error=duplicate";
+            }
+
+            // Comprobar si CUALQUIER otro usuario ya tiene este asiento (en carrito o comprado)
+            boolean yaReservado = entradaRepository.existsByScreeningAndSeat(screening, seat);
+
+            if (yaReservado) {
+                return "redirect:/carrito?error=seat_taken";
+            }
+
+            // Crear nueva entrada y guardar en el carrito
+            Entrada entrada = new Entrada(screening, seat, usuarioActual);
             entradaRepository.save(entrada);
         }
 
@@ -130,7 +142,8 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String checkoutCart() {
+    @org.springframework.transaction.annotation.Transactional
+    public String checkoutCart(Model model) {
         User usuarioActual = getAuthenticatedUser();
         if (usuarioActual == null) {
             return "redirect:/login";
@@ -141,12 +154,58 @@ public class CartController {
             return "redirect:/carrito";
         }
 
-        Order order = new Order(usuarioActual.getId());
+        // Check for conflicts: remove entries whose seats were already purchased
+        // OR are in another user's cart that was already checked out
+        List<Entrada> conflictos = new java.util.ArrayList<>();
+        List<Entrada> disponibles = new java.util.ArrayList<>();
+
         for (Entrada entrada : entradasCarrito) {
+            boolean yaPurchased = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(
+                    entrada.getScreening(), entrada.getSeat());
+            boolean enOtroCarrito = entradaRepository.existsByScreeningAndSeatAndUserNotAndOrderIsNull(
+                    entrada.getScreening(), entrada.getSeat(), usuarioActual);
+
+            if (yaPurchased) {
+                // This seat was already purchased by another user
+                conflictos.add(entrada);
+            } else {
+                // If another user also has it in cart, we still proceed (first to checkout wins)
+                disponibles.add(entrada);
+            }
+        }
+
+        // Remove conflicting entries from the cart
+        if (!conflictos.isEmpty()) {
+            entradaRepository.deleteAll(conflictos);
+        }
+
+        // If all seats had conflicts, redirect with error
+        if (disponibles.isEmpty()) {
+            return "redirect:/carrito?error=seats_taken";
+        }
+
+        // Create the order only with available seats
+        Order order = new Order(usuarioActual.getId());
+        for (Entrada entrada : disponibles) {
             order.addEntrada(entrada);
         }
 
         orderRepository.save(order);
+
+        // Delete the same seats from other users' carts (they lost the race)
+        for (Entrada entrada : disponibles) {
+            List<Entrada> duplicadasOtros = entradaRepository.findByScreeningAndSeatAndUserNotAndOrderIsNull(
+                    entrada.getScreening(), entrada.getSeat(), usuarioActual);
+            if (!duplicadasOtros.isEmpty()) {
+                entradaRepository.deleteAll(duplicadasOtros);
+            }
+        }
+
+        if (!conflictos.isEmpty()) {
+            // Some seats were taken but others were purchased successfully
+            model.addAttribute("conflictos", conflictos.size());
+        }
+
         return "session/confirmed";
     }
 

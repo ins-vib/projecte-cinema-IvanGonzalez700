@@ -17,6 +17,9 @@
             Fantàstic! Les teves entrades s'han processat correctament. Preparat per gaudir d'una experiència de cinema
             inoblidable.
         </p>
+        <div th:if="${conflictos != null}" style="background-color: #fff3cd; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #ffeaa7;">
+            <strong>⚠️ Avís:</strong> <span th:text="${conflictos}">0</span> seient(s) ja havien estat comprats per un altre usuari i s'han eliminat de la teva comanda.
+        </div>
         <a th:href="@{/comandes/historialComandes.html}">Veure historial de comandes</a>
         <br>
         <br>
