@@ -47,7 +47,6 @@ public class CartController {
     
     @GetMapping
     public String viewCart(Model model) {
-        // Obtener usuario autenticado
         User usuarioActual = getAuthenticatedUser();
         
         if (usuarioActual == null) {
@@ -99,10 +98,10 @@ public class CartController {
                 return "redirect:/carrito?error=duplicate";
             }
 
-            // Comprobar si CUALQUIER otro usuario ya tiene este asiento (en carrito o comprado)
-            boolean yaReservado = entradaRepository.existsByScreeningAndSeat(screening, seat);
+            // Comprobar si este asiento ya está COMPRADO (tiene un pedido asociado)
+            boolean yaComprado = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(screening, seat);
 
-            if (yaReservado) {
+            if (yaComprado) {
                 return "redirect:/carrito?error=seat_taken";
             }
 

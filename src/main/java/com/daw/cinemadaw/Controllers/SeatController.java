@@ -170,7 +170,8 @@ public class SeatController {
                     Seat seat = optionalSeat.get();
                     if (seat.getRoom() != null && screening.getRoom() != null
                             && seat.getRoom().getId().equals(screening.getRoom().getId())
-                            && !entradaRepository.existsByScreeningAndSeat(screening, seat)) {
+                            && !entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(screening, seat)
+                            && !entradaRepository.existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat, usuarioActual)) {
                         Entrada entrada = new Entrada(screening, seat, usuarioActual);
                         entradaRepository.save(entrada);
                     }
@@ -193,9 +194,6 @@ public class SeatController {
         return "redirect:/movies";
     }
 
-    /**
-     * Obtiene el usuario autenticado actualmente
-     */
     private User getAuthenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {

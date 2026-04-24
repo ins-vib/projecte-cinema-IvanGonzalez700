@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import com.daw.cinemadaw.domain.user.User;
@@ -82,6 +83,11 @@ public class SecurityConfig {
             .deleteCookies("JSESSIONID")
             .logoutSuccessUrl("/logout-success")
             .permitAll()
+        )
+        // Gestión de sesiones: cada login crea una sesión nueva y limpia
+        // Esto previene que datos de sesión de un usuario anterior se arrastren
+        .sessionManagement(session -> session
+            .sessionFixation(fixation -> fixation.newSession())
         );
 
         return http.build();
@@ -105,6 +111,11 @@ public class SecurityConfig {
                     .roles(user.getRole().name())
                     .build();
         };
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
 }
