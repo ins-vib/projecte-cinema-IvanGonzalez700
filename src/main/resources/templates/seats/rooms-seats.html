@@ -11,17 +11,11 @@
 <body>
     <h1>Seients</h1>
 
-    <ul>
-        <li th:each="seat : ${seats}">
-            <span th:text="${seat.x}"></span>
-            <span th:text="${seat.y}"></span>
-        </li>
-    </ul>
-
-
-
     <a th:href="@{/seats/room/{id}/add(id=${room.id})}">Afegir nou seient</a>
+    <br>
+    <br>  
 
+    <a th:href="@{/cinemes/{id}(id=${room.cinema.id})}">Tornar</a>
     <br>
     <br>
 
@@ -48,6 +42,9 @@
             </a>
         </g>
     </svg>
+
+
+
 </body>
 
 </html>

@@ -12,8 +12,12 @@
 
     <h1>LLISTAT DE PELICULES</h1>
 
+    <br>
     <a th:href="@{/movies/create}">Crear nova pel·lícula</a>
-    <br><br>
+    <br>
+    
+    <span><br></span>
+    
     <table>
         <tbody>
             <tr th:each="movie : ${llista}">
@@ -39,6 +43,9 @@
 
         </tbody>
     </table>
+
+    <span><br></span>
+    <a th:href="@{/admin}">Tornar</a>    
 
 </body>
 

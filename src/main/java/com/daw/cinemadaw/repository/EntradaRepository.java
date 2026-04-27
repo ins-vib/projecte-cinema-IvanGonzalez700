@@ -23,6 +23,7 @@ public interface EntradaRepository extends JpaRepository<Entrada, Long> {
     List<Entrada> findByScreeningAndOrderIsNotNull(Screening screening);
 
     // Finds all entries in cart (not yet purchased) for a screening
+    boolean existsByScreeningAndSeatAndOrderIsNull(Screening screening, Seat seat);
     List<Entrada> findByScreeningAndOrderIsNull(Screening screening);
 
     // Checks if the user already has this seat in the cart (not yet purchased)

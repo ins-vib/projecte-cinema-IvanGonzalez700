@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,97 +53,89 @@ public class CartController {
         if (usuarioActual == null) {
             return "redirect:/login";
         }
-
-        // Obtener todas las entradas del carrito del usuario (sin ordenar todavía)
+        //entradas usuari
         List<Entrada> entradas = entradaRepository.findByUserAndOrderIsNull(usuarioActual);
-        
-        // Calcular el total
+        //preu
         double total = entradas.stream()
                 .mapToDouble(entrada -> entrada.getScreening().getPrice())
                 .sum();
-
-        // Pasar datos a la vista
         model.addAttribute("entradas", entradas);
         model.addAttribute("total", total);
         model.addAttribute("usuarioActual", usuarioActual);
-
+        if (usuarioActual.getCartNotice() != null && !usuarioActual.getCartNotice().isBlank()) {
+            model.addAttribute("cartNotice", usuarioActual.getCartNotice());
+            usuarioActual.setCartNotice(null);
+            userRepository.save(usuarioActual);
+        }
         return "session/carrito";
     }
 
-    
     @PostMapping("/add")
-    public String addToCart(
-            @RequestParam Long screeningId,
-            @RequestParam Long seatId) {
-        
-        // Obtener usuario autenticado
+    @Transactional
+    public String addToCart(@RequestParam Long screeningId, @RequestParam Long seatId) {
         User usuarioActual = getAuthenticatedUser();
-        
         if (usuarioActual == null) {
             return "redirect:/login";
         }
-
-        // Obtener la proyección y el asiento
         Optional<Screening> screeningOpt = screeningRepository.findById(screeningId);
-        Optional<Seat> seatOpt = seatRepository.findById(seatId);
-
-        if (screeningOpt.isPresent() && seatOpt.isPresent()) {
+        if (screeningOpt.isPresent()) {
             Screening screening = screeningOpt.get();
-            Seat seat = seatOpt.get();
+            Seat seat = seatRepository.findByIdForUpdate(seatId);
+            if (seat == null) {
+                return "redirect:/carrito";
+            }
 
-            // Comprobar si el usuario ya tiene esta entrada en el carrito
-            boolean yaEnCarrito = entradaRepository
-                    .existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat, usuarioActual);
-
+            boolean yaEnCarrito = entradaRepository.existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat, usuarioActual);
             if (yaEnCarrito) {
                 return "redirect:/carrito?error=duplicate";
             }
 
-            // Comprobar si este asiento ya está COMPRADO (tiene un pedido asociado)
             boolean yaComprado = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(screening, seat);
-
             if (yaComprado) {
-                return "redirect:/carrito?error=seat_taken";
+                return "redirect:/carrito?error=seats_taken";
             }
 
-            // Crear nueva entrada y guardar en el carrito
+            boolean reservadoPorOtroUsuario = entradaRepository.existsByScreeningAndSeatAndOrderIsNull(screening, seat);
+            if (reservadoPorOtroUsuario) {
+                return "redirect:/carrito?error=seats_taken";
+            }
+
             Entrada entrada = new Entrada(screening, seat, usuarioActual);
             entradaRepository.save(entrada);
         }
-
         return "redirect:/carrito";
     }
 
 
     @PostMapping("/remove/{entradaId}")
     public String removeFromCart(@PathVariable Long entradaId) {
-        // Verificar que la entrada pertenece al usuario actual
-        Optional<Entrada> entradaOpt = entradaRepository.findById(entradaId);
         User usuarioActual = getAuthenticatedUser();
-
-        if (entradaOpt.isPresent() && entradaOpt.get().getUser().getId().equals(usuarioActual.getId())) {
-            entradaRepository.deleteById(entradaId);
+        if (usuarioActual == null) {
+            return "redirect:/login";
         }
 
-        return "redirect:/carrito";
+        Optional<Entrada> entradaOpt = entradaRepository.findById(entradaId);
+        if (entradaOpt.isPresent() && entradaOpt.get().getUser().getId().equals(usuarioActual.getId())) {
+            entradaRepository.deleteById(entradaId);
+            return "redirect:/carrito";
+        }
+        return "redirect:/carrito?error=removed";
     }
-
 
     @PostMapping("/clear")
     public String clearCart() {
         User usuarioActual = getAuthenticatedUser();
-        
         if (usuarioActual != null) {
             List<Entrada> entradasDelUsuario = entradaRepository.findByUserAndOrderIsNull(usuarioActual);
             entradaRepository.deleteAll(entradasDelUsuario);
         }
-
         return "redirect:/carrito";
     }
 
     @PostMapping("/checkout")
-    @org.springframework.transaction.annotation.Transactional
+    @Transactional
     public String checkoutCart(Model model) {
+
         User usuarioActual = getAuthenticatedUser();
         if (usuarioActual == null) {
             return "redirect:/login";
@@ -153,37 +146,38 @@ public class CartController {
             return "redirect:/carrito";
         }
 
-        // Check for conflicts: remove entries whose seats were already purchased
-        // OR are in another user's cart that was already checked out
+        List<Long> seatIds = entradasCarrito.stream()
+                .map(entrada -> entrada.getSeat().getId())
+                .distinct()
+                .sorted()
+                .toList();
+        seatRepository.findAllByIdInForUpdate(seatIds);
+
         List<Entrada> conflictos = new java.util.ArrayList<>();
         List<Entrada> disponibles = new java.util.ArrayList<>();
 
         for (Entrada entrada : entradasCarrito) {
-            boolean yaPurchased = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(
-                    entrada.getScreening(), entrada.getSeat());
-            boolean enOtroCarrito = entradaRepository.existsByScreeningAndSeatAndUserNotAndOrderIsNull(
+            boolean yaPurchased = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(entrada.getScreening(), entrada.getSeat());
+            boolean reservadoPorOtroUsuario = entradaRepository.existsByScreeningAndSeatAndUserNotAndOrderIsNull(
                     entrada.getScreening(), entrada.getSeat(), usuarioActual);
 
-            if (yaPurchased) {
-                // This seat was already purchased by another user
+            if (yaPurchased || reservadoPorOtroUsuario) {
                 conflictos.add(entrada);
             } else {
-                // If another user also has it in cart, we still proceed (first to checkout wins)
                 disponibles.add(entrada);
             }
         }
-
-        // Remove conflicting entries from the cart
+    
         if (!conflictos.isEmpty()) {
             entradaRepository.deleteAll(conflictos);
         }
 
-        // If all seats had conflicts, redirect with error
+        //error
         if (disponibles.isEmpty()) {
             return "redirect:/carrito?error=seats_taken";
         }
 
-        // Create the order only with available seats
+        // Order con entradas que no tengan errores 
         Order order = new Order(usuarioActual.getId());
         for (Entrada entrada : disponibles) {
             order.addEntrada(entrada);
@@ -191,19 +185,28 @@ public class CartController {
 
         orderRepository.save(order);
 
-        // Delete the same seats from other users' carts (they lost the race)
         for (Entrada entrada : disponibles) {
             List<Entrada> duplicadasOtros = entradaRepository.findByScreeningAndSeatAndUserNotAndOrderIsNull(
                     entrada.getScreening(), entrada.getSeat(), usuarioActual);
             if (!duplicadasOtros.isEmpty()) {
+                for (Entrada duplicada : duplicadasOtros) {
+                    User usuarioAfectado = duplicada.getUser();
+                    if (usuarioAfectado != null) {
+                        usuarioAfectado.setCartNotice("seats_taken");
+                        userRepository.save(usuarioAfectado);
+                    }
+                }
                 entradaRepository.deleteAll(duplicadasOtros);
             }
         }
 
         if (!conflictos.isEmpty()) {
-            // Some seats were taken but others were purchased successfully
             model.addAttribute("conflictos", conflictos.size());
         }
+
+        model.addAttribute("entradas", disponibles);
+        model.addAttribute("total", order.getTotal());
+        model.addAttribute("order", order);
 
         return "session/confirmed";
     }

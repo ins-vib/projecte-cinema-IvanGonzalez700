@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -154,27 +155,40 @@ public class SeatController {
     }
 
     @PostMapping("/entrades/{screeningId}/comprar")
+    @Transactional
     public String comprarEntradas(
             @PathVariable Long screeningId,
             @RequestParam(required = false) List<Long> seatIds) {
         Optional<Screening> optionalScreening = screeningRepository.findById(screeningId);
         if (optionalScreening.isPresent() && seatIds != null) {
             Screening screening = optionalScreening.get();
-
-            // Obtener el usuario autenticado
             User usuarioActual = getAuthenticatedUser();
+            if (usuarioActual == null) {
+                return "redirect:/login";
+            }
 
             for (Long seatId : seatIds) {
-                Optional<Seat> optionalSeat = seatRepository.findById(seatId);
-                if (optionalSeat.isPresent()) {
-                    Seat seat = optionalSeat.get();
-                    if (seat.getRoom() != null && screening.getRoom() != null
-                            && seat.getRoom().getId().equals(screening.getRoom().getId())
-                            && !entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(screening, seat)
-                            && !entradaRepository.existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat, usuarioActual)) {
-                        Entrada entrada = new Entrada(screening, seat, usuarioActual);
-                        entradaRepository.save(entrada);
-                    }
+                Seat seat = seatRepository.findByIdForUpdate(seatId);
+                if (seat == null) {
+                    continue;
+                }
+
+                boolean belongsToRoom = seat.getRoom() != null
+                        && screening.getRoom() != null
+                        && seat.getRoom().getId().equals(screening.getRoom().getId());
+                if (!belongsToRoom) {
+                    continue;
+                }
+
+                boolean yaComprado = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(screening, seat);
+                boolean yaEnSuCarrito = entradaRepository.existsByScreeningAndSeatAndUserAndOrderIsNull(screening, seat,
+                        usuarioActual);
+                boolean reservadoPorOtroUsuario = entradaRepository.existsByScreeningAndSeatAndOrderIsNull(screening, seat)
+                        && !yaEnSuCarrito;
+
+                if (!yaComprado && !yaEnSuCarrito && !reservadoPorOtroUsuario) {
+                    Entrada entrada = new Entrada(screening, seat, usuarioActual);
+                    entradaRepository.save(entrada);
                 }
             }
         }

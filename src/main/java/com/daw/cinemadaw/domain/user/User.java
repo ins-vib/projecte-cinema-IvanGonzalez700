@@ -30,6 +30,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     public Role role;
 
+    @Column(name = "cart_notice")
+    public String cartNotice;
+
     // Constructor buit (obligatori per JPA)
     public User() {
     }
@@ -65,5 +68,13 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getCartNotice() {
+        return cartNotice;
+    }
+
+    public void setCartNotice(String cartNotice) {
+        this.cartNotice = cartNotice;
     }
 }

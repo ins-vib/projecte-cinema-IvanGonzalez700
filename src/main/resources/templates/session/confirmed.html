@@ -6,24 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compra Confirmada - CinemaDAW</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
-
 </head>
 
 <body>
 
-    <div>
-        <h1>Compra Confirmada!</h1>
+    <main>
+        <h1>Compra confirmada</h1>
         <p>
-            Fantàstic! Les teves entrades s'han processat correctament. Preparat per gaudir d'una experiència de cinema
-            inoblidable.
+            Les teves entrades s'han comprat correctament. Aquí tens el resum de la teva compra.
         </p>
-        <div th:if="${conflictos != null}" style="background-color: #fff3cd; color: #856404; padding: 12px; border-radius: 6px; margin-bottom: 16px; border: 1px solid #ffeaa7;">
-            <strong>⚠️ Avís:</strong> <span th:text="${conflictos}">0</span> seient(s) ja havien estat comprats per un altre usuari i s'han eliminat de la teva comanda.
+
+        <div th:if="${conflictos != null}" class="alert alert-warning">
+            <strong>Avís:</strong>
+            <span th:text="${conflictos}">0</span> seient(s) ja havien estat comprats per un altre usuari i s'han
+            eliminat de la teva comanda.
         </div>
-        <br>
-        <br>
-        <a th:href="@{/}">Inici</a>
-    </div>
+
+        <div th:if="${entradas != null and !entradas.isEmpty()}">
+            <section class="purchase-summary">
+                <h2>Resum de la compra</h2>
+                <p>
+                    <strong>Total pagat:</strong>
+                    <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 2, 'POINT') + ' €'}">0,00 €</span>
+                </p>
+                <p>
+                    <strong>Entrades comprades:</strong>
+                    <span th:text="${entradas.size()}">0</span>
+                </p>
+                <p th:if="${order != null}">
+                    <strong>Data de compra:</strong>
+                    <span th:text="${#temporals.format(order.datetime, 'dd/MM/yyyy HH:mm')}">01/01/2026 20:00</span>
+                </p>
+            </section>
+
+            <h2>Detall de les entrades</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pel·lícula</th>
+                        <th>Cinema</th>
+                        <th>Sala</th>
+                        <th>Data i hora</th>
+                        <th>Seient</th>
+                        <th>Preu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="entrada : ${entradas}">
+                        <td th:text="${entrada.screening.movie.title}">Nom de la pel·lícula</td>
+                        <td th:text="${entrada.screening.room.cinema.name}">Cinema</td>
+                        <td th:text="${entrada.screening.room.name}">Sala</td>
+                        <td th:text="${#temporals.format(entrada.screening.screeningDateTime, 'dd/MM/yyyy HH:mm')}">Data
+                            i hora</td>
+                        <td th:text="${entrada.seat.y + ', ' + entrada.seat.x}">Seient</td>
+                        <td th:text="${#numbers.formatDecimal(entrada.screening.price, 0, 'COMMA', 2, 'POINT') + ' €'}">
+                            0,00 €</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p th:if="${entradas == null or entradas.isEmpty()}">
+            No s'ha pogut generar el resum perquè no hi ha entrades associades a aquesta compra.
+        </p>
+
+        <p class="session-links">
+            <a th:href="@{/carrito}">Tornar al carret</a>
+            <span> | </span>
+            <a th:href="@{/}">Inici</a>
+        </p>
+    </main>
 
 </body>
 

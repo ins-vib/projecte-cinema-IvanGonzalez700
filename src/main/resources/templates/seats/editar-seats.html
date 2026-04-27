@@ -41,9 +41,10 @@
         <br><br>
 
         <button type="submit">Guardar canvis</button>
-        <a th:href="@{/room/{id}(id=${seat.room.id})}">Tornar</a>
-        
-        <a th:href="@{/seats/{id}/delete(id=${seat.id})}">Eliminar seient</a>
+        <br>
+        | <a th:href="@{/room/{id}(id=${seat.room.id})}">Tornar</a>
+        <br>
+        | <a th:href="@{/seats/{id}/delete(id=${seat.id})}">Eliminar seient</a>
 
     </form>
 

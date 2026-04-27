@@ -288,6 +288,23 @@ input[type="submit"]:active,
     border: 1px solid #fecaca;
 }
 
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.purchase-summary {
+    margin: 24px 0;
+    background-color: #f8f8f8;
+    border-color: #dcdcdc;
+}
+
+.session-links {
+    margin-top: 20px;
+    margin-bottom: 0;
+}
+
 /* Elementos visuales SVG / Seats */
 svg {
     display: block;

@@ -63,6 +63,8 @@
     <div th:if="${#lists.isEmpty(cinema.rooms)}">No hi ha sales en aquest cinema</div>
 
     <a th:href="@{/rooms/create/{id}(id=${cinema.id})}">Crear nova sala</a>
+    <a th:href="@{/cinemes}">Tornar</a>
+    
 </body>
 
 </html>
