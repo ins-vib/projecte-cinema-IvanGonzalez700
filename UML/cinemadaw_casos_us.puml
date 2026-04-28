@@ -1,17 +1,6 @@
 @startuml cinemadaw_casos_us
 title Diagrama de Casos d'Ús — CinemaDaw
 
-left to right direction
-skinparam actorStyle awesome
-skinparam packageStyle rectangle
-skinparam usecase {
-    BackgroundColor White
-    BorderColor #555
-    ArrowColor #333
-    FontSize 12
-}
-
-' ─── Actors ──────────────────────────────────────────────────────────
 actor "Visitant" as Visitant
 actor "Client\n(usuari autenticat)" as Client
 actor "Administrador" as Admin
@@ -19,10 +8,9 @@ actor "Administrador" as Admin
 Client --|> Visitant
 Admin --|> Client
 
-' ─── Sistema ─────────────────────────────────────────────────────────
 rectangle "CinemaDaw — Sistema" {
 
-    ' --- Accés públic ---
+    
     package "Accés públic" {
         usecase "Veure pàgina d'inici" as UC_Home
         usecase "Consultar notícies" as UC_News
@@ -33,7 +21,7 @@ rectangle "CinemaDaw — Sistema" {
         usecase "Iniciar sessió" as UC_Login
     }
 
-    ' --- Client ---
+    
     package "Gestió personal (Client)" {
         usecase "Veure detall d'una pel·lícula" as UC_MovieDetail
         usecase "Escriure ressenya" as UC_Review
@@ -49,7 +37,7 @@ rectangle "CinemaDaw — Sistema" {
         usecase "Gestionar cookies" as UC_Cookies
     }
 
-    ' --- Administrador ---
+    
     package "Gestió del sistema (Admin)" {
 
         package "Cinemes" {
@@ -95,7 +83,7 @@ rectangle "CinemaDaw — Sistema" {
     }
 }
 
-' ─── Associacions Visitant ───────────────────────────────────────────
+
 Visitant --> UC_Home
 Visitant --> UC_News
 Visitant --> UC_Movies
@@ -104,7 +92,7 @@ Visitant --> UC_Sessions
 Visitant --> UC_Register
 Visitant --> UC_Login
 
-' ─── Associacions Client ─────────────────────────────────────────────
+
 Client --> UC_MovieDetail
 Client --> UC_Review
 Client --> UC_DeleteReview
@@ -118,7 +106,7 @@ Client --> UC_MyTickets
 Client --> UC_Logout
 Client --> UC_Cookies
 
-' ─── Associacions Admin ──────────────────────────────────────────────
+
 Admin --> UC_ListCinema
 Admin --> UC_CreateCinema
 Admin --> UC_EditCinema
@@ -148,7 +136,6 @@ Admin --> UC_DeleteScreening
 Admin --> UC_AdminReviews
 Admin --> UC_AdminDeleteReview
 
-' ─── Relacions include/extend ────────────────────────────────────────
 UC_AddCart ..> UC_SelectSeat : <<include>>
 UC_ConfirmOrder ..> UC_Cart : <<include>>
 UC_Review ..> UC_MovieDetail : <<extend>>
