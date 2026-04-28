@@ -662,4 +662,94 @@ body.landing main {
         width: 100%;
         max-width: 300px;
     }
+
 }
+
+/* ── Reviews page ── */
+.reviews-page { max-width: 700px; margin: 0 auto; padding: 1.5rem; }
+
+.movie-header { margin-bottom: 1.5rem; }
+.movie-header h1 { font-size: 1.8rem; margin-bottom: 0.25rem; }
+.movie-header .meta { color: #64748b; font-size: 0.9rem; }
+
+.rating-summary { display: flex; align-items: center; gap: 1.5rem;
+    background: #fff8f0; border: 1px solid #fde8c8; border-radius: 10px;
+    padding: 1rem 1.5rem; margin-bottom: 1.5rem; }
+.big-score { font-size: 2.5rem; font-weight: 700; color: #e67e22; line-height: 1; }
+.big-score span:last-child { font-size: 1rem; color: #aaa; }
+.stars-row span { font-size: 1.4rem; }
+.stars-row .filled { color: #22b8e6; }
+.stars-row .empty  { color: #ddd; }
+.total-label { font-size: 0.8rem; color: #888; margin-top: 0.25rem; }
+.no-rating { color: #888; font-style: italic; }
+
+.review-form-card { background: #fff; border: 2px solid #ffffff;
+    border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 2rem; }
+.review-form-card h2 { margin: 0 0 1rem; font-size: 1.2rem; color: #5d22e6; }
+.review-form-card form { max-width: none; margin-bottom: 0; }
+
+.star-selector { display: flex; flex-direction: row-reverse;
+    justify-content: flex-end; gap: 4px; margin-bottom: 1rem; }
+.star-selector input { display: none; }
+.star-selector label { font-size: 2rem; color: #ddd; cursor: pointer; transition: color 0.15s; }
+.star-selector input:checked ~ label,
+.star-selector label:hover,
+.star-selector label:hover ~ label { color: #22aee6; }
+
+.form-group { 
+    margin-bottom: 1rem; }
+.form-group label { 
+    display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.9rem; }
+.form-group textarea { 
+    width: 100%; padding: 0.6rem 0.8rem; border-radius: 8px;
+    border: 1px solid #ccc; font-size: 0.95rem; resize: vertical;
+    min-height: 80px; box-sizing: border-box; margin-bottom: 0; }
+
+.btn-submit { 
+    background: #22c9e6; color: #fff; border: none;
+    padding: 0.7rem 1.5rem; border-radius: 8px;
+    font-size: 1rem; cursor: pointer; font-weight: 600;
+    display: inline-block; margin: 0; }
+.btn-submit:hover { 
+    background: #0054d3; }
+
+.reviews-list { 
+    margin-top: 1.5rem; }
+.reviews-list h2 { 
+    margin-bottom: 1rem; }
+
+.review-card { 
+    background: #fff; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+
+.review-header { 
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 0.5rem; }
+.review-header .author { 
+    font-weight: 600; color: #2c3e50; }
+.review-header .date { 
+    font-size: 0.8rem; color: #94a3b8; }
+
+/* ← Fix: el form del botón eliminar no debe heredar max-width ni margin */
+.review-header form { 
+    max-width: none; margin: 0; display: inline; }
+.btn-delete { 
+    background: #3c86e7; color: #fff; border: none;
+    padding: 0.35rem 0.9rem; border-radius: 6px; font-size: 0.85rem;
+    cursor: pointer; font-weight: 600; margin: 0; display: inline-block; }
+.btn-delete:hover { 
+    background: #2b5ac0; }
+.stars { 
+    margin-bottom: 0.4rem; font-size: 1.1rem; }
+.comment { 
+    color: #4a5568; font-size: 0.95rem; margin-top: 0.3rem; }
+.comment.empty { 
+    color: #aaa; font-style: italic; }
+.back-link { 
+    display: inline-block; margin-top: 1.5rem; font-size: 0.9rem; }
+.info-box { 
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem;
+    font-size: 0.9rem; color: #1e40af; }
+.no-reviews { 
+    color: #888; font-style: italic; padding: 1rem 0; }

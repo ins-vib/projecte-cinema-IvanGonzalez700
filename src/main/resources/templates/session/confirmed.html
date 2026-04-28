@@ -17,9 +17,9 @@
         </p>
 
         <div th:if="${conflictos != null}" class="alert alert-warning">
-            <strong>Avís:</strong>
-            <span th:text="${conflictos}">0</span> seient(s) ja havien estat comprats per un altre usuari i s'han
-            eliminat de la teva comanda.
+            <strong>⚠ Avís:</strong>
+            <span th:text="${conflictos}">0</span> entrada/es del teu carret no s'han pogut comprar perquè un altre
+            usuari ja les havia comprat abans. Només s'han processat les entrades disponibles.
         </div>
 
         <div th:if="${entradas != null and !entradas.isEmpty()}">

@@ -32,5 +32,8 @@ public interface EntradaRepository extends JpaRepository<Entrada, Long> {
     // Checks if another user (not the given one) already has this seat in their cart
     boolean existsByScreeningAndSeatAndUserNotAndOrderIsNull(Screening screening, Seat seat, User user);
     List<Entrada> findByScreeningAndSeatAndUserNotAndOrderIsNull(Screening screening, Seat seat, User user);
-    
+
+    // Find all entradas for a specific seat (needed for cascade deletion)
+    List<Entrada> findBySeat(Seat seat);
+
 }

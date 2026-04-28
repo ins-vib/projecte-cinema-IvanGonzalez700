@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Room {
@@ -19,13 +22,16 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="el nom del cinema no pot ser buit")
+    @NotBlank(message = "El nom de la sala és obligatori")
+    @Size(min = 1, max = 50, message = "El nom de la sala ha de tenir entre 1 i 50 caràcters")
     @Column
     private String name;
 
+    @Min(value = 1, message = "La capacitat ha de ser com a mínim 1")
     @Column
     private int capacity;
 
+    @NotNull(message = "La sala ha d'estar assignada a un cinema")
     @ManyToOne
     private Cinema cinema;
 

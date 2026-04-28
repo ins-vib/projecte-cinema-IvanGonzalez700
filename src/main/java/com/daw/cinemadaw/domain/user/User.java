@@ -16,22 +16,22 @@ public class User {
     // Clau primària autogenerada
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     // Nom d'usuari únic i obligatori
     @Column(nullable = false, unique = true)
-    public String username;
+    private String username;
 
     // Contrasenya (s'hauria d'emmagatzemar encriptada)
     @Column(nullable = false)
-    public String password;
+    private String password;
 
     // Rol de l'usuari (es guarda com String a la BD)
     @Enumerated(EnumType.STRING)
-    public Role role;
+    private Role role;
 
     @Column(name = "cart_notice")
-    public String cartNotice;
+    private String cartNotice;
 
     // Constructor buit (obligatori per JPA)
     public User() {

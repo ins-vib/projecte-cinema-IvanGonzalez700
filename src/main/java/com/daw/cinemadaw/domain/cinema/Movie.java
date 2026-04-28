@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,26 +21,27 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="el titol de la peli")
-    @Size(min = 2, max = 100, message = "la ciutat")
+    @NotBlank(message = "El títol de la pel·lícula és obligatori")
+    @Size(min = 2, max = 200, message = "El títol ha de tenir entre 2 i 200 caràcters")
     @Column(nullable = false, length = 200)
     private String title;
 
-    @NotNull(message="la duracio")
+    @NotNull(message = "La duració és obligatòria")
+    @Min(value = 1, message = "La duració ha de ser com a mínim 1 minut")
     @Column(name = "duration_minutes", nullable = false)
     private Integer duration;
 
-    @NotBlank(message="el genere")
-    @Size(min = 2, max = 100, message = "el genere")
+    @NotBlank(message = "El gènere és obligatori")
+    @Size(min = 2, max = 50, message = "El gènere ha de tenir entre 2 i 50 caràcters")
     @Column(length = 50)
     private String genre;
 
-    @NotBlank(message="la descripcio")
-    @Size(min = 2, max = 100, message = "la descripcio")
+    @NotBlank(message = "La descripció és obligatòria")
+    @Size(min = 10, max = 2000, message = "La descripció ha de tenir entre 10 i 2000 caràcters")
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @NotNull(message="la data de sortida")
+    @NotNull(message = "La data d'estrena és obligatòria")
     @Column(name = "release_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;

@@ -13,7 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.DTO.ServicesListDTO;
 import com.daw.cinemadaw.domain.cinema.Cinema;
+import com.daw.cinemadaw.domain.cinema.Entrada;
+import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.domain.cinema.Screening;
+import com.daw.cinemadaw.domain.cinema.Seat;
 import com.daw.cinemadaw.repository.CinemaRepository;
+import com.daw.cinemadaw.repository.EntradaRepository;
+import com.daw.cinemadaw.repository.ScreeningRepository;
 
 import jakarta.validation.Valid;
 
@@ -21,9 +27,14 @@ import jakarta.validation.Valid;
 public class CinemaController {
 
     private final CinemaRepository cinemaRepository;
+    private final ScreeningRepository screeningRepository;
+    private final EntradaRepository entradaRepository;
 
-    public CinemaController(CinemaRepository cinemaRepository) {
+    public CinemaController(CinemaRepository cinemaRepository, ScreeningRepository screeningRepository,
+                            EntradaRepository entradaRepository) {
         this.cinemaRepository = cinemaRepository;
+        this.screeningRepository = screeningRepository;
+        this.entradaRepository = entradaRepository;
     }
 
     @GetMapping("/cinemes")
@@ -62,6 +73,27 @@ public class CinemaController {
 
         if (optional.isPresent()) {
             Cinema cinema = optional.get();
+
+            // Per cada sala del cinema, eliminar dependències
+            for (Room room : cinema.getRooms()) {
+                // 1. Eliminar totes les entrades associades a les sessions d'aquesta sala
+                List<Screening> screenings = screeningRepository.findByRoom(room);
+                for (Screening screening : screenings) {
+                    List<Entrada> entradas = entradaRepository.findByScreening(screening);
+                    entradaRepository.deleteAll(entradas);
+                }
+
+                // 2. Eliminar totes les sessions d'aquesta sala
+                screeningRepository.deleteAll(screenings);
+
+                // 3. Eliminar totes les entrades associades als seients d'aquesta sala
+                for (Seat seat : room.getSeats()) {
+                    List<Entrada> entradasSeat = entradaRepository.findBySeat(seat);
+                    entradaRepository.deleteAll(entradasSeat);
+                }
+            }
+
+            // 4. Ara ja es pot eliminar el cinema (les sales i seients s'eliminen per cascade)
             cinemaRepository.delete(cinema);
             
         }

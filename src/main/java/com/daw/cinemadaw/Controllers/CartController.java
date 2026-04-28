@@ -95,11 +95,6 @@ public class CartController {
                 return "redirect:/carrito?error=seats_taken";
             }
 
-            boolean reservadoPorOtroUsuario = entradaRepository.existsByScreeningAndSeatAndOrderIsNull(screening, seat);
-            if (reservadoPorOtroUsuario) {
-                return "redirect:/carrito?error=seats_taken";
-            }
-
             Entrada entrada = new Entrada(screening, seat, usuarioActual);
             entradaRepository.save(entrada);
         }
@@ -158,10 +153,8 @@ public class CartController {
 
         for (Entrada entrada : entradasCarrito) {
             boolean yaPurchased = entradaRepository.existsByScreeningAndSeatAndOrderIsNotNull(entrada.getScreening(), entrada.getSeat());
-            boolean reservadoPorOtroUsuario = entradaRepository.existsByScreeningAndSeatAndUserNotAndOrderIsNull(
-                    entrada.getScreening(), entrada.getSeat(), usuarioActual);
 
-            if (yaPurchased || reservadoPorOtroUsuario) {
+            if (yaPurchased) {
                 conflictos.add(entrada);
             } else {
                 disponibles.add(entrada);
@@ -196,7 +189,6 @@ public class CartController {
                         userRepository.save(usuarioAfectado);
                     }
                 }
-                entradaRepository.deleteAll(duplicadasOtros);
             }
         }
 

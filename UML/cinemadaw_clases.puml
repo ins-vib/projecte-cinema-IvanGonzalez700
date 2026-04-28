@@ -1,0 +1,332 @@
+@startuml cinemadaw_clases
+title Diagrama de Clases — CinemaDaw
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam class {
+    BackgroundColor White
+    BorderColor #555
+    ArrowColor #333
+    FontSize 13
+}
+
+' ─── Enums ───────────────────────────────────────────────────────────
+enum SeatType {
+    STANDARD
+    PREMIUM
+    ADAPTED
+}
+
+enum Role {
+    ADMIN
+    CLIENT
+}
+
+' ─── Entitats de domini ──────────────────────────────────────────────
+class Cinema {
+    - id : Long
+    - name : String
+    - address : String
+    - city : String
+    - postalCode : String
+    --
+    + getId() : Long
+    + getName() : String
+    + getAddress() : String
+    + getCity() : String
+    + getPostalCode() : String
+    + getRooms() : List<Room>
+}
+
+class Room {
+    - id : Long
+    - name : String
+    - capacity : int
+    --
+    + getId() : Long
+    + getName() : String
+    + getCapacity() : int
+    + getCinema() : Cinema
+    + getSeats() : List<Seat>
+}
+
+class Seat {
+    - id : Long
+    - number : int
+    - seatRow : String
+    - x : int
+    - y : int
+    - type : SeatType
+    - active : boolean
+    --
+    + getId() : Long
+    + getNumber() : int
+    + getRow() : String
+    + getType() : SeatType
+    + isActive() : boolean
+    + getRoom() : Room
+}
+
+class Movie {
+    - id : Long
+    - title : String
+    - duration : Integer
+    - genre : String
+    - description : String
+    - releaseDate : LocalDate
+    --
+    + getId() : Long
+    + getTitle() : String
+    + getDuration() : Integer
+    + getGenre() : String
+    + getReleaseDate() : LocalDate
+}
+
+class Screening {
+    - id : Long
+    - screeningDateTime : LocalDateTime
+    - price : Double
+    --
+    + getId() : Long
+    + getScreeningDateTime() : LocalDateTime
+    + getPrice() : Double
+    + getMovie() : Movie
+    + getRoom() : Room
+}
+
+class Entrada {
+    - id : Long
+    --
+    + getId() : Long
+    + getScreening() : Screening
+    + getSeat() : Seat
+    + getUser() : User
+    + getOrder() : Order
+}
+
+class Order {
+    - id : Long
+    - datetime : LocalDateTime
+    - total : Double
+    - userId : Long
+    --
+    + getId() : Long
+    + getDatetime() : LocalDateTime
+    + getTotal() : Double
+    + addEntrada(e : Entrada) : void
+    + getEntradas() : List<Entrada>
+}
+
+class New <<POJO>> {
+    - headLine : String
+    - body : String
+    --
+    + getHeadLine() : String
+    + getBody() : String
+}
+
+class User {
+    - id : Long
+    - username : String
+    - password : String
+    - role : Role
+    - cartNotice : String
+    --
+    + getId() : Long
+    + getUsername() : String
+    + getRole() : Role
+}
+
+class Review {
+    - id : Long
+    - rating : Integer
+    - comment : String
+    - createdAt : LocalDateTime
+    --
+    + getId() : Long
+    + getRating() : Integer
+    + getComment() : String
+    + getMovie() : Movie
+    + getUser() : User
+}
+
+' ─── DTOs ────────────────────────────────────────────────────────────
+class SeatsListDTO <<DTO>> {
+    - seatIds : List<Long>
+}
+
+class ServicesListDTO <<DTO>> {
+    - services : List<String>
+}
+
+' ─── Repositories ────────────────────────────────────────────────────
+interface CinemaRepository <<Repository>> {
+    + findAll() : List<Cinema>
+    + findById(id) : Optional<Cinema>
+}
+
+interface RoomRepository <<Repository>> {
+    + findByCinemaId(cinemaId) : List<Room>
+}
+
+interface SeatRepository <<Repository>> {
+    + findByRoomId(roomId) : List<Seat>
+    + findAvailableByScreening(screeningId) : List<Seat>
+}
+
+interface MovieRepository <<Repository>> {
+    + findAll() : List<Movie>
+}
+
+interface ScreeningRepository <<Repository>> {
+    + findByMovieId(movieId) : List<Screening>
+    + findByRoomId(roomId) : List<Screening>
+}
+
+interface EntradaRepository <<Repository>> {
+    + findByUserAndScreening(userId, screeningId) : List<Entrada>
+    + findByOrderId(orderId) : List<Entrada>
+}
+
+interface OrderRepository <<Repository>> {
+    + findByUserId(userId) : List<Order>
+}
+
+interface UserRepository <<Repository>> {
+    + findByUsername(username) : Optional<User>
+}
+
+interface ReviewRepository <<Repository>> {
+    + findByMovieId(movieId) : List<Review>
+    + findByUserId(userId) : List<Review>
+}
+
+' ─── Services ────────────────────────────────────────────────────────
+class EntradaService <<Service>> {
+    + getCartEntrades(userId) : List<Entrada>
+    + addToCart(screeningId, seatId, userId) : void
+    + removeFromCart(entradaId, userId) : void
+    + confirmOrder(userId) : Order
+}
+
+class NewsService <<Service>> {
+    + getNews() : List<New>
+}
+
+' ─── Controllers ─────────────────────────────────────────────────────
+class CinemaController <<Controller>> {
+    + listCinemas() : String
+    + createCinema() : String
+    + editCinema(id) : String
+    + deleteCinema(id) : String
+}
+
+class RoomController <<Controller>> {
+    + listRooms(cinemaId) : String
+    + createRoom(cinemaId) : String
+    + editRoom(id) : String
+}
+
+class SeatController <<Controller>> {
+    + listSeats(roomId) : String
+    + createSeats(roomId) : String
+    + editSeat(id) : String
+}
+
+class MovieController <<Controller>> {
+    + listMovies() : String
+    + createMovie() : String
+    + editMovie(id) : String
+}
+
+class ScreeningController <<Controller>> {
+    + listScreenings() : String
+    + createScreening() : String
+    + editScreening(id) : String
+}
+
+class CartController <<Controller>> {
+    + viewCart(userId) : String
+    + addToCart(screeningId, seatId) : String
+    + removeFromCart(entradaId) : String
+    + confirmOrder() : String
+}
+
+class ReviewController <<Controller>> {
+    + listReviews(movieId) : String
+    + createReview() : String
+    + deleteReview(id) : String
+}
+
+class HomeController <<Controller>> {
+    + home() : String
+}
+
+class RegisterController <<Controller>> {
+    + register() : String
+    + processRegister() : String
+}
+
+class SessionController <<Controller>> {
+    + sessionData() : String
+}
+
+class NewsController <<Controller>> {
+    + news() : String
+}
+
+class CookieController <<Controller>> {
+    + formCookie() : String
+    + showCookie() : String
+}
+
+class CurrentController <<Controller>> {
+    + currentUser() : String
+}
+
+' ─── Relacions de domini ─────────────────────────────────────────────
+Cinema "1" *-- "0..*" Room : té >
+Room "1" *-- "0..*" Seat : conté >
+Room "1" o-- "0..*" Screening : programada a >
+Movie "1" o-- "0..*" Screening : projectada en >
+Screening "1" o-- "0..*" Entrada : inclosa a >
+Seat "1" o-- "0..*" Entrada : reservada en >
+User "1" o-- "0..*" Entrada : compra >
+Order "1" *-- "1..*" Entrada : agrupa >
+User "1" o-- "0..*" Review : escriu >
+Movie "1" o-- "0..*" Review : rep >
+
+Seat --> SeatType
+User --> Role
+
+' ─── Relacions repositories ──────────────────────────────────────────
+CinemaRepository ..> Cinema
+RoomRepository ..> Room
+SeatRepository ..> Seat
+MovieRepository ..> Movie
+ScreeningRepository ..> Screening
+EntradaRepository ..> Entrada
+OrderRepository ..> Order
+UserRepository ..> User
+ReviewRepository ..> Review
+
+' ─── Relacions services ──────────────────────────────────────────────
+EntradaService ..> EntradaRepository
+EntradaService ..> OrderRepository
+EntradaService ..> Entrada
+EntradaService ..> Order
+NewsService ..> New
+
+' ─── Relacions controllers ───────────────────────────────────────────
+CinemaController ..> CinemaRepository
+RoomController ..> RoomRepository
+SeatController ..> SeatRepository
+MovieController ..> MovieRepository
+ScreeningController ..> ScreeningRepository
+CartController ..> EntradaService
+ReviewController ..> ReviewRepository
+HomeController ..> MovieRepository
+NewsController ..> NewsService
+RegisterController ..> UserRepository
+
+@enduml

@@ -9,6 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Screening {
@@ -18,21 +20,26 @@ public class Screening {
     private Long id;
 
 
+    @NotNull(message = "La data i hora de la sessió són obligatòries")
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime screeningDateTime;
 
-    private double price;
+    @NotNull(message = "El preu és obligatori")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El preu ha de ser superior a 0")
+    private Double price;
 
+    @NotNull(message = "La pel·lícula és obligatòria")
     @ManyToOne
     private Movie movie;
 
+    @NotNull(message = "La sala és obligatòria")
     @ManyToOne
     private Room room;
 
     public Screening() {
     }
 
-    public Screening(Long id, LocalDateTime screeningDateTime, double price, Movie movie, Room room) {
+    public Screening(Long id, LocalDateTime screeningDateTime, Double price, Movie movie, Room room) {
         this.id = id;
         this.screeningDateTime = screeningDateTime;
         this.price = price;
@@ -56,11 +63,11 @@ public class Screening {
         this.screeningDateTime = screeningDateTime;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

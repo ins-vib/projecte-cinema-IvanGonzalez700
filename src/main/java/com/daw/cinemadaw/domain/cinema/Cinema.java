@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -22,20 +23,23 @@ public class Cinema {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message="el nom del cinema")
+    @NotBlank(message = "El nom del cinema és obligatori")
+    @Size(min = 2, max = 100, message = "El nom del cinema ha de tenir entre 2 i 100 caràcters")
     @Column
     private String name;
 
-    @NotBlank(message="el nom del la adreca")
+    @NotBlank(message = "L'adreça del cinema és obligatòria")
+    @Size(min = 2, max = 200, message = "L'adreça ha de tenir entre 2 i 200 caràcters")
     @Column
     private String address;
 
-    @NotBlank(message="el nom del la ciutat")
+    @NotBlank(message = "La ciutat és obligatòria")
+    @Size(min = 2, max = 100, message = "La ciutat ha de tenir entre 2 i 100 caràcters")
     @Column
     private String city;
 
-    
-    @Pattern(regexp = "\\d{5}", message = "el codi postal ha de tenir 5 digits")
+    @NotBlank(message = "El codi postal és obligatori")
+    @Pattern(regexp = "\\d{5}", message = "El codi postal ha de tenir exactament 5 dígits")
     @Column
     private String postalCode;
 

@@ -20,6 +20,7 @@
                     <th>Sinopsis</th>
                     <th>Duració</th>
                     <th>Veure sessions</th>
+                    <th>Veure ressenyes</th>
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,9 @@
                     <td th:text="${movie.duration}">Duración</td>
                     <td>
                         <a th:href="@{/sessions/{id}/sessions(id=${movie.id})}">Veure sessions</a>
+                    </td>
+                    <td>
+                        <a th:href="@{/movies/{id}/reviews(id=${movie.id})}">Veure valoracions</a>
                     </td>
                 </tr>
             </tbody>

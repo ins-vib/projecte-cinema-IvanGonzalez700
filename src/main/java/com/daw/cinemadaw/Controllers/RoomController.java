@@ -1,5 +1,7 @@
 package com.daw.cinemadaw.Controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
@@ -10,9 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.daw.cinemadaw.domain.cinema.Cinema;
+import com.daw.cinemadaw.domain.cinema.Entrada;
 import com.daw.cinemadaw.domain.cinema.Room;
+import com.daw.cinemadaw.domain.cinema.Screening;
+import com.daw.cinemadaw.domain.cinema.Seat;
+import com.daw.cinemadaw.domain.cinema.SeatType;
 import com.daw.cinemadaw.repository.CinemaRepository;
+import com.daw.cinemadaw.repository.EntradaRepository;
 import com.daw.cinemadaw.repository.RoomRepository;
+import com.daw.cinemadaw.repository.ScreeningRepository;
+import com.daw.cinemadaw.repository.SeatRepository;
 
 @Controller
 public class RoomController {
@@ -20,11 +29,19 @@ public class RoomController {
     
     private final RoomRepository roomRepository;
     private final CinemaRepository cinemaRepository;
+    private final SeatRepository seatRepository;
+    private final ScreeningRepository screeningRepository;
+    private final EntradaRepository entradaRepository;
 
 
-    public RoomController(RoomRepository roomRepository, CinemaRepository cinemaRepository) {
+    public RoomController(RoomRepository roomRepository, CinemaRepository cinemaRepository, 
+                          SeatRepository seatRepository, ScreeningRepository screeningRepository,
+                          EntradaRepository entradaRepository) {
         this.roomRepository = roomRepository;
         this.cinemaRepository = cinemaRepository;
+        this.seatRepository = seatRepository;
+        this.screeningRepository = screeningRepository;
+        this.entradaRepository = entradaRepository;
     }
 
     @GetMapping("rooms/create")
@@ -37,6 +54,7 @@ public class RoomController {
     @PostMapping("rooms/create")
     public String guardar_room(@ModelAttribute("sala") Room room){
         roomRepository.save(room);
+        generateSeatsForRoom(room);
         return "redirect:/movies";
     }
 
@@ -62,6 +80,25 @@ public class RoomController {
         if(optional.isPresent()){
             room= optional.get();
             cinemaId=room.getCinema().getId();
+
+            
+            List<Screening> screenings = screeningRepository.findByRoom(room);
+            for (Screening screening : screenings) {
+                List<Entrada> entradas = entradaRepository.findByScreening(screening);
+                entradaRepository.deleteAll(entradas);
+            }
+
+           
+            screeningRepository.deleteAll(screenings);
+
+            
+            List<Seat> seats = room.getSeats();
+            for (Seat seat : seats) {
+                List<Entrada> entradasSeat = entradaRepository.findBySeat(seat);
+                entradaRepository.deleteAll(entradasSeat);
+            }
+
+
             roomRepository.delete(room);
         }
         return "redirect:/cinemes/"+cinemaId;
@@ -120,8 +157,25 @@ public class RoomController {
 
         room.setCinema(cinema);
         roomRepository.save(room);
+        generateSeatsForRoom(room);
 
         return "redirect:/cinemes/"+cinemaId;
+    }
+
+    private void generateSeatsForRoom(Room room) {
+        int capacity = room.getCapacity();
+        if (capacity <= 0) return;
+        int seatsPerRow = 10;
+        List<Seat> seats = new ArrayList<>();
+        for (int i = 1; i <= capacity; i++) {
+            int row = (i - 1) / seatsPerRow;
+            int col = (i - 1) % seatsPerRow;
+            String rowLetter = String.valueOf((char) ('A' + row));
+            Seat seat = new Seat(i, rowLetter, col + 1, row + 1, SeatType.STANDARD);
+            seat.setRoom(room);
+            seats.add(seat);
+        }
+        seatRepository.saveAll(seats);
     }
 
 }

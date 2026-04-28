@@ -1,0 +1,157 @@
+@startuml cinemadaw_casos_us
+title Diagrama de Casos d'Ús — CinemaDaw
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor White
+    BorderColor #555
+    ArrowColor #333
+    FontSize 12
+}
+
+' ─── Actors ──────────────────────────────────────────────────────────
+actor "Visitant" as Visitant
+actor "Client\n(usuari autenticat)" as Client
+actor "Administrador" as Admin
+
+Client --|> Visitant
+Admin --|> Client
+
+' ─── Sistema ─────────────────────────────────────────────────────────
+rectangle "CinemaDaw — Sistema" {
+
+    ' --- Accés públic ---
+    package "Accés públic" {
+        usecase "Veure pàgina d'inici" as UC_Home
+        usecase "Consultar notícies" as UC_News
+        usecase "Veure pel·lícules" as UC_Movies
+        usecase "Veure cinemes" as UC_Cinemes
+        usecase "Consultar sessions disponibles" as UC_Sessions
+        usecase "Registrar-se" as UC_Register
+        usecase "Iniciar sessió" as UC_Login
+    }
+
+    ' --- Client ---
+    package "Gestió personal (Client)" {
+        usecase "Veure detall d'una pel·lícula" as UC_MovieDetail
+        usecase "Escriure ressenya" as UC_Review
+        usecase "Eliminar la pròpia ressenya" as UC_DeleteReview
+        usecase "Seleccionar seients" as UC_SelectSeat
+        usecase "Afegir entrades al carret" as UC_AddCart
+        usecase "Veure carret" as UC_Cart
+        usecase "Eliminar entrada del carret" as UC_RemoveCart
+        usecase "Confirmar comanda" as UC_ConfirmOrder
+        usecase "Veure historial de comandes" as UC_Orders
+        usecase "Veure les meves entrades" as UC_MyTickets
+        usecase "Tancar sessió" as UC_Logout
+        usecase "Gestionar cookies" as UC_Cookies
+    }
+
+    ' --- Administrador ---
+    package "Gestió del sistema (Admin)" {
+
+        package "Cinemes" {
+            usecase "Llistar cinemes" as UC_ListCinema
+            usecase "Crear cinema" as UC_CreateCinema
+            usecase "Editar cinema" as UC_EditCinema
+            usecase "Eliminar cinema" as UC_DeleteCinema
+            usecase "Gestionar serveis del cinema" as UC_Services
+        }
+
+        package "Sales" {
+            usecase "Llistar sales" as UC_ListRoom
+            usecase "Crear sala" as UC_CreateRoom
+            usecase "Editar sala" as UC_EditRoom
+            usecase "Eliminar sala" as UC_DeleteRoom
+        }
+
+        package "Seients" {
+            usecase "Llistar seients d'una sala" as UC_ListSeat
+            usecase "Crear seients" as UC_CreateSeat
+            usecase "Editar seient" as UC_EditSeat
+            usecase "Activar/Desactivar seient" as UC_ToggleSeat
+        }
+
+        package "Pel·lícules" {
+            usecase "Llistar pel·lícules (admin)" as UC_ListMovie
+            usecase "Crear pel·lícula" as UC_CreateMovie
+            usecase "Editar pel·lícula" as UC_EditMovie
+            usecase "Eliminar pel·lícula" as UC_DeleteMovie
+        }
+
+        package "Sessions / Projeccions" {
+            usecase "Llistar projeccions" as UC_ListScreening
+            usecase "Crear projecció" as UC_CreateScreening
+            usecase "Editar projecció" as UC_EditScreening
+            usecase "Eliminar projecció" as UC_DeleteScreening
+        }
+
+        package "Usuaris i ressenyes (admin)" {
+            usecase "Veure ressenyes de pel·lícula" as UC_AdminReviews
+            usecase "Eliminar qualsevol ressenya" as UC_AdminDeleteReview
+        }
+    }
+}
+
+' ─── Associacions Visitant ───────────────────────────────────────────
+Visitant --> UC_Home
+Visitant --> UC_News
+Visitant --> UC_Movies
+Visitant --> UC_Cinemes
+Visitant --> UC_Sessions
+Visitant --> UC_Register
+Visitant --> UC_Login
+
+' ─── Associacions Client ─────────────────────────────────────────────
+Client --> UC_MovieDetail
+Client --> UC_Review
+Client --> UC_DeleteReview
+Client --> UC_SelectSeat
+Client --> UC_AddCart
+Client --> UC_Cart
+Client --> UC_RemoveCart
+Client --> UC_ConfirmOrder
+Client --> UC_Orders
+Client --> UC_MyTickets
+Client --> UC_Logout
+Client --> UC_Cookies
+
+' ─── Associacions Admin ──────────────────────────────────────────────
+Admin --> UC_ListCinema
+Admin --> UC_CreateCinema
+Admin --> UC_EditCinema
+Admin --> UC_DeleteCinema
+Admin --> UC_Services
+
+Admin --> UC_ListRoom
+Admin --> UC_CreateRoom
+Admin --> UC_EditRoom
+Admin --> UC_DeleteRoom
+
+Admin --> UC_ListSeat
+Admin --> UC_CreateSeat
+Admin --> UC_EditSeat
+Admin --> UC_ToggleSeat
+
+Admin --> UC_ListMovie
+Admin --> UC_CreateMovie
+Admin --> UC_EditMovie
+Admin --> UC_DeleteMovie
+
+Admin --> UC_ListScreening
+Admin --> UC_CreateScreening
+Admin --> UC_EditScreening
+Admin --> UC_DeleteScreening
+
+Admin --> UC_AdminReviews
+Admin --> UC_AdminDeleteReview
+
+' ─── Relacions include/extend ────────────────────────────────────────
+UC_AddCart ..> UC_SelectSeat : <<include>>
+UC_ConfirmOrder ..> UC_Cart : <<include>>
+UC_Review ..> UC_MovieDetail : <<extend>>
+UC_AddCart ..> UC_Login : <<extend>>
+
+@enduml
