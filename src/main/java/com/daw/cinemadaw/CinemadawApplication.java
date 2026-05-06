@@ -10,4 +10,3 @@ public class CinemadawApplication {
 		SpringApplication.run(CinemadawApplication.class, args);
 	}
 }
-
