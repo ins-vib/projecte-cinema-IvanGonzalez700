@@ -14,7 +14,7 @@
         <!-- Capçalera pel·lícula -->
         <div class="movie-header">
             <h1 th:text="${movie.title}">Títol</h1>
-            <div class="meta" th:text="|${movie.genre} · ${movie.duration} min · Estrena: ${movie.releaseDate}|">
+            <div class="meta" th:text="|${movie.mainGenre != null ? movie.mainGenre : 'Sense gènere'} · ${movie.duration} min · Estrena: ${movie.releaseDate}|">
                 Gènere · durada
             </div>
         </div>
@@ -40,18 +40,17 @@
                         <span th:class="${i <= average} ? 'filled' : 'empty'">★</span>
                     </th:block>
                 </div>
-                <div class="total-label" th:text="${totalReviews == 1} ? '1 valoració'">
+                <div class="total-label" th:text="${totalReviews == 1} ? '1 valoració' : (${totalReviews} + ' valoracions')">
                     0 valoracions
                 </div>
             </div>
         </div>
 
-        <!-- Formulari: només si l'usuari pot valorar -->
+        <!-- Formulari valoració -->
         <div class="review-form-card">
             <h2>✍️ Deixa la teva valoració</h2>
             <form th:action="@{/movies/{id}/reviews(id=${movie.id})}" method="post">
 
-                <!-- Selector d'estreles (CSS pur, sense JS) -->
                 <div class="form-group">
                     <label>Puntuació *</label>
                     <div class="star-selector">
@@ -68,7 +67,6 @@
                     </div>
                 </div>
 
-                <!-- Comentari -->
                 <div class="form-group">
                     <label for="comment">Comentari (opcional)</label>
                     <textarea id="comment" name="comment"
@@ -86,7 +84,7 @@
 
         <!-- Llista de valoracions -->
         <div class="reviews-list">
-            <h2 >Valoracions</h2>
+            <h2>Valoracions</h2>
 
             <div th:if="${reviews.isEmpty()}" class="no-reviews">
                 Encara no hi ha valoracions per a aquesta pel·lícula. Sigues el primer!
@@ -100,7 +98,6 @@
                             01/01/2025
                         </div>
                     </div>
-                    <!-- Botó eliminar: només el propi autor -->
                     <form th:if="${currentUser != null and review.user.id == currentUser.id}"
                         th:action="@{/reviews/{id}/delete(id=${review.id})}" method="post"
                         onsubmit="return confirm('Segur que vols eliminar la teva valoració?')">
@@ -108,7 +105,6 @@
                     </form>
                 </div>
 
-                <!-- Estreles de la review -->
                 <div class="stars">
                     <th:block th:each="i : ${#numbers.sequence(1,5)}">
                         <span th:style="${i <= review.rating} ? 'color:#e67e22' : 'color:#ddd'">★</span>
@@ -117,7 +113,6 @@
                         style="font-size:0.85rem;color:#666;margin-left:4px"></strong>
                 </div>
 
-                <!-- Comentari -->
                 <div th:if="${review.comment != null and !review.comment.isEmpty()}" class="comment"
                     th:text="${review.comment}">
                     Comentari de la review

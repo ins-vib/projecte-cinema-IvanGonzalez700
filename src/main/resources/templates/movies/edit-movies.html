@@ -1,11 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Pel·lícula</title>
+    <style>
+        .field-error {
+            color: #dc2626;
+            font-size: 0.82em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        input.error, textarea.error {
+            border-color: #dc2626;
+            background-color: #fff5f5;
+        }
+        .genre-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+        .genre-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0f4ff;
+            border: 1.5px solid #c5d5f5;
+            border-radius: 20px;
+            padding: 6px 14px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+            user-select: none;
+        }
+        .genre-option:hover {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+        .genre-option input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            accent-color: #1e40af;
+            cursor: pointer;
+        }
+        .genre-option span {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+        .genre-option:has(input:checked) {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
+        .genre-option:has(input:checked) span {
+            color: #fff;
+        }
+        .section-label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .hint {
+            color: #64748b;
+            font-size: 0.8em;
+            margin-top: -8px;
+            margin-bottom: 12px;
+            display: block;
+        }
+    </style>
 </head>
 
 <body>
@@ -14,20 +82,35 @@
     <form th:action="@{/movies/edit}" th:object="${movie}" method="post">
         <input type="hidden" th:field="*{id}" />
 
-        <label>Títol:</label>
-        <input type="text" th:field="*{title}" /><br/>
+        <label>Títol: *</label>
+        <input type="text" th:field="*{title}" th:class="${#fields.hasErrors('title')} ? 'error'" />
+        <span class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
 
-        <label>Duració (minuts):</label>
-        <input type="number" th:field="*{duration}" /><br/>
+        <label>Duració (minuts): *</label>
+        <input type="number" th:field="*{duration}" th:class="${#fields.hasErrors('duration')} ? 'error'" />
+        <span class="field-error" th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}"></span>
 
-        <label>Gènere:</label>
-        <input type="text" th:field="*{genre}" /><br/>
+        <label>Descripció: *</label>
+        <span class="hint">Mínim 10 caràcters, màxim 2000.</span>
+        <textarea th:field="*{description}" th:class="${#fields.hasErrors('description')} ? 'error'"></textarea>
+        <span class="field-error" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span>
 
-        <label>Descripció:</label>
-        <textarea th:field="*{description}"></textarea><br/>
+        <label>Data d'estrena: *</label>
+        <input type="date" th:field="*{releaseDate}" th:class="${#fields.hasErrors('releaseDate')} ? 'error'" />
+        <span class="field-error" th:if="${#fields.hasErrors('releaseDate')}" th:errors="*{releaseDate}"></span>
 
-        <label>Data d'estrena:</label>
-        <input type="date" th:field="*{releaseDate}" /><br/>
+        <div>
+            <span class="section-label">Gèneres (pots seleccionar-ne més d'un):</span>
+            <div class="genre-selector">
+                <label class="genre-option" th:each="genre : ${allGenres}">
+                    <input type="checkbox"
+                           name="genreIds"
+                           th:value="${genre.id}"
+                           th:checked="${movie.genres.contains(genre)}" />
+                    <span th:text="${genre.name}">Gènere</span>
+                </label>
+            </div>
+        </div>
 
         <button type="submit">Guardar</button>
     </form>

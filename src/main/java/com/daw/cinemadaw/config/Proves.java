@@ -69,5 +69,18 @@ public class Proves implements CommandLineRunner {
     client.setPassword(encoder.encode("1234"));
     client.setRole(Role.CLIENT);
     userRepository.save(client);
-    }    
+
+    User clientexam = new User();
+    clientexam.setUsername("clientexam");
+    clientexam.setPassword(encoder.encode("exam"));
+    clientexam.setRole(Role.CLIENT);
+    userRepository.save(clientexam);
+
+    User adminexam = new User();
+    adminexam.setUsername("adminexam");
+    adminexam.setPassword(encoder.encode("exam"));
+    adminexam.setRole(Role.ADMIN);
+    userRepository.save(adminexam);
+
+    }   
 }

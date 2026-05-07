@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Llistat de Pel·lícules</title>
+    <style>
+        .genre-badge {
+            display: inline-block;
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 2px 10px;
+            font-size: 0.78em;
+            font-weight: 600;
+            margin: 2px;
+            white-space: nowrap;
+        }
+        .genres-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+        }
+        .no-genres {
+            color: #aaa;
+            font-style: italic;
+            font-size: 0.85em;
+        }
+    </style>
 </head>
 
 <body>
@@ -15,13 +39,36 @@
     <br>
     <a th:href="@{/movies/create}">Crear nova pel·lícula</a>
     <br>
-    
     <span><br></span>
     
     <table>
+        <thead>
+            <tr>
+                <th>Títol</th>
+                <th>Gèneres</th>
+                <th>Projeccions</th>
+                <th>Crear projecció</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
         <tbody>
             <tr th:each="movie : ${llista}">
                 <td th:text="${movie.title}">Nom</td>
+
+                <td>
+                    <div class="genres-cell">
+                        <th:block th:if="${movie.genres != null and !movie.genres.isEmpty()}">
+                            <span class="genre-badge"
+                                  th:each="genre : ${movie.genres}"
+                                  th:text="${genre.name}">Gènere</span>
+                        </th:block>
+                        <span class="no-genres"
+                              th:if="${movie.genres == null or movie.genres.isEmpty()}">
+                            Sense gèneres
+                        </span>
+                    </div>
+                </td>
 
                 <td>
                     <a th:href="@{/screenings/{id}/screenings(id=${movie.id})}">Projeccions</a>
@@ -38,9 +85,7 @@
                 <td>
                     <a th:href="@{/movies/delete/{id}(id=${movie.id})}">Eliminar pel·lícula</a>
                 </td>
-
             </tr>
-
         </tbody>
     </table>
 
